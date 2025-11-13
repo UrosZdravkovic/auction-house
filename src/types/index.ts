@@ -1,5 +1,11 @@
 import { Timestamp } from "firebase/firestore";
 
+// User role types
+export type UserRole = "user" | "admin";
+
+// Auction status types
+export type AuctionStatus = "pending" | "approved" | "rejected";
+
 export type Auction = {
   id: string;
   title: string;
@@ -10,6 +16,10 @@ export type Auction = {
   bidsCount: number;
   imageUrl: string;
   ownerId: string;
+  status: AuctionStatus;
+  reviewedBy?: string; // Admin ID who reviewed
+  reviewedAt?: Timestamp; // When it was reviewed
+  rejectionReason?: string; // Reason if rejected
   createdAt: Timestamp;
   endsAt: Timestamp;
 };
@@ -22,5 +32,5 @@ export type Bid = {
   createdAt: Timestamp;
 };
 
-export type CreateAuctionData = Omit<Auction, 'id' | 'createdAt' | 'currentBid' | 'bidsCount'>;
+export type CreateAuctionData = Omit<Auction, 'id' | 'createdAt' | 'currentBid' | 'bidsCount' | 'status' | 'reviewedBy' | 'reviewedAt' | 'rejectionReason'>;
 export type CreateBidData = Omit<Bid, 'id' | 'createdAt'>;

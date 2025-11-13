@@ -1,12 +1,13 @@
-import { collection, getDocs, getDoc, doc, addDoc, updateDoc, serverTimestamp } from "firebase/firestore";
+import { collection, getDocs, getDoc, doc, addDoc, updateDoc, serverTimestamp, query, where } from "firebase/firestore";
 import { db } from "../firebase/firebase";
 import type { Auction, CreateAuctionData } from "../types";
 
 /**
- * Fetch all auctions from Firestore
+ * Fetch all approved auctions from Firestore (public view)
  */
 export const fetchAuctions = async (): Promise<Auction[]> => {
-  const snapshot = await getDocs(collection(db, 'auctions'));
+  const q = query(collection(db, 'auctions'), where('status', '==', 'approved'));
+  const snapshot = await getDocs(q);
   return snapshot.docs.map(doc => ({
     id: doc.id,
     ...doc.data()
@@ -28,13 +29,14 @@ export const fetchAuctionById = async (auctionId: string): Promise<Auction | nul
 };
 
 /**
- * Create a new auction
+ * Create a new auction (defaults to pending status)
  */
 export const createAuction = async (auctionData: CreateAuctionData): Promise<string> => {
   const docRef = await addDoc(collection(db, 'auctions'), {
     ...auctionData,
     currentBid: auctionData.startPrice,
     bidsCount: 0,
+    status: 'pending', // New auctions start as pending
     createdAt: serverTimestamp(),
   });
   return docRef.id;
@@ -52,5 +54,46 @@ export const updateAuctionBid = async (
   await updateDoc(auctionRef, {
     currentBid,
     bidsCount,
+  });
+};
+
+/**
+ * Fetch all pending auctions (Admin only)
+ */
+export const fetchPendingAuctions = async (): Promise<Auction[]> => {
+  const q = query(collection(db, 'auctions'), where('status', '==', 'pending'));
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map(doc => ({
+    id: doc.id,
+    ...doc.data()
+  })) as Auction[];
+};
+
+/**
+ * Approve an auction (Admin only)
+ */
+export const approveAuction = async (auctionId: string, adminId: string): Promise<void> => {
+  const auctionRef = doc(db, 'auctions', auctionId);
+  await updateDoc(auctionRef, {
+    status: 'approved',
+    reviewedBy: adminId,
+    reviewedAt: serverTimestamp(),
+  });
+};
+
+/**
+ * Reject an auction (Admin only)
+ */
+export const rejectAuction = async (
+  auctionId: string, 
+  adminId: string, 
+  reason?: string
+): Promise<void> => {
+  const auctionRef = doc(db, 'auctions', auctionId);
+  await updateDoc(auctionRef, {
+    status: 'rejected',
+    reviewedBy: adminId,
+    reviewedAt: serverTimestamp(),
+    ...(reason && { rejectionReason: reason }),
   });
 };

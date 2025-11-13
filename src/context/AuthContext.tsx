@@ -9,11 +9,13 @@ import {
 } from "firebase/auth";
 import { db } from "../firebase/firebase";
 import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
+import type { UserRole } from "../types";
 
 // Tipovi
 type UserProfile = {
   name: string;
   email: string;
+  role: UserRole;
   createdAt: any;
 }
 
@@ -21,6 +23,7 @@ type AuthContextType = {
   user: User | null;
   userProfile: UserProfile | null;
   loading: boolean;
+  isAdmin: boolean;
   login: (email: string, password: string) => Promise<void>;
   signup: (email: string, password: string, name: string) => Promise<void>;
   logout: () => Promise<void>;
@@ -76,6 +79,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     await setDoc(doc(db, "users", firebaseUser.uid), {
       name,
       email,
+      role: "user", // Default role for new users
       createdAt: serverTimestamp(),
     });
     // onAuthStateChanged će automatski ažurirati state
@@ -87,8 +91,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     // onAuthStateChanged će automatski ažurirati state
   };
 
+  // Helper to check if user is admin
+  const isAdmin = userProfile?.role === "admin";
+
   return (
-    <AuthContext.Provider value={{ user, userProfile, loading, login, signup, logout }}>
+    <AuthContext.Provider value={{ user, userProfile, loading, isAdmin, login, signup, logout }}>
       {children}
     </AuthContext.Provider>
   );
