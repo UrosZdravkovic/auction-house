@@ -1,7 +1,8 @@
 import { collection, addDoc, Timestamp } from "firebase/firestore";
 import { db } from "../firebase/firebase";
+import type { AuctionStatus } from "../types";
 
-// Sample auction data
+// Sample auction data with different statuses
 const sampleAuctions = [
   {
     title: "Vintage Sports Car",
@@ -10,7 +11,8 @@ const sampleAuctions = [
     startPrice: 25000,
     imageUrl: "https://example.com/car1.jpg",
     ownerId: "sample-owner-1",
-    endsAt: Timestamp.fromDate(new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)), // 7 days from now
+    status: "approved" as AuctionStatus,
+    endsAt: Timestamp.fromDate(new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)),
   },
   {
     title: "Gaming Laptop",
@@ -19,7 +21,8 @@ const sampleAuctions = [
     startPrice: 2000,
     imageUrl: "https://example.com/laptop.jpg",
     ownerId: "sample-owner-2",
-    endsAt: Timestamp.fromDate(new Date(Date.now() + 5 * 24 * 60 * 60 * 1000)), // 5 days from now
+    status: "pending" as AuctionStatus, // Pending for admin review
+    endsAt: Timestamp.fromDate(new Date(Date.now() + 5 * 24 * 60 * 60 * 1000)),
   },
   {
     title: "Luxury Watch",
@@ -28,7 +31,8 @@ const sampleAuctions = [
     startPrice: 5000,
     imageUrl: "https://example.com/watch.jpg",
     ownerId: "sample-owner-1",
-    endsAt: Timestamp.fromDate(new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)), // 3 days from now
+    status: "approved" as AuctionStatus,
+    endsAt: Timestamp.fromDate(new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)),
   },
   {
     title: "Mountain Bike",
@@ -37,7 +41,8 @@ const sampleAuctions = [
     startPrice: 800,
     imageUrl: "https://example.com/bike.jpg",
     ownerId: "sample-owner-3",
-    endsAt: Timestamp.fromDate(new Date(Date.now() + 10 * 24 * 60 * 60 * 1000)), // 10 days from now
+    status: "pending" as AuctionStatus, // Pending for admin review
+    endsAt: Timestamp.fromDate(new Date(Date.now() + 10 * 24 * 60 * 60 * 1000)),
   },
   {
     title: "Antique Furniture Set",
@@ -46,7 +51,18 @@ const sampleAuctions = [
     startPrice: 3500,
     imageUrl: "https://example.com/furniture.jpg",
     ownerId: "sample-owner-2",
-    endsAt: Timestamp.fromDate(new Date(Date.now() + 14 * 24 * 60 * 60 * 1000)), // 14 days from now
+    status: "pending" as AuctionStatus, // Pending for admin review
+    endsAt: Timestamp.fromDate(new Date(Date.now() + 14 * 24 * 60 * 60 * 1000)),
+  },
+  {
+    title: "Smartphone",
+    description: "Latest model iPhone in mint condition",
+    category: "Electronics",
+    startPrice: 900,
+    imageUrl: "https://example.com/phone.jpg",
+    ownerId: "sample-owner-1",
+    status: "approved" as AuctionStatus,
+    endsAt: Timestamp.fromDate(new Date(Date.now() + 4 * 24 * 60 * 60 * 1000)),
   },
 ];
 

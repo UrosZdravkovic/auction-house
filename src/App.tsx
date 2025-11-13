@@ -1,13 +1,7 @@
-import auth from './firebase/firebase';
-
 export default function App() {
-
-  console.log(auth)
-
-  return ( 
+  return (
     <div>
-
-      <h1>Auction app</h1>
+      <h1>Auction House</h1>
     </div>
-  )
+  );
 }
