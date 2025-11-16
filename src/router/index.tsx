@@ -4,7 +4,7 @@ import { AdminLayout } from '../components/navigation/AdminLayout';
 import { HomePage } from '../pages/HomePage';
 import { AuctionsPage } from '../pages/AuctionsPage';
 import { ProfilePage } from '../pages/ProfilePage';
-import { LoginPage } from '../pages/LoginPage';
+import { AuthenticationPage } from '../pages/AuthenticationPage';
 import { AdminDashboardPage } from '../pages/admin/AdminDashboardPage';
 import { AdminPendingPage } from '../pages/admin/AdminPendingPage';
 import { AdminUsersPage } from '../pages/admin/AdminUsersPage';
@@ -28,11 +28,11 @@ export const createUserRouter = () =>
           path: 'profile',
           element: <ProfilePage />,
         },
-        {
-          path: 'login',
-          element: <LoginPage />,
-        },
       ],
+    },
+    {
+      path: '/auth',
+      element: <AuthenticationPage />,
     },
   ]);
   
