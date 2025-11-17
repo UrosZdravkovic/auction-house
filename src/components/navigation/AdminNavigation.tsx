@@ -37,7 +37,7 @@ export const AdminNavigation = () => {
       <nav className="max-w-5xl mx-auto px-6 h-16 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-sm border border-gray-200 dark:border-gray-800 rounded-full">
         <div className="flex items-center justify-between h-full w-full gap-8">
           {/* Logo with Admin Badge */}
-          <NavLink to="/" className="flex items-center gap-2 transition-all duration-200 px-2 py-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800">
+          <NavLink to="/" className="flex items-center gap-2 transition-all duration-200 px-2 py-1 rounded-full">
             <span className="text-lg font-semibold text-gray-900 dark:text-gray-100">
               Auction House
             </span>

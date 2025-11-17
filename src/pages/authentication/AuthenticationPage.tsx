@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { HiArrowLeft } from 'react-icons/hi';
 import { LoginForm } from '../../components/authentication/LoginForm';
 import { RegistrationForm } from '../../components/authentication/RegistrationForm';
+import { ThemeToggle } from '../../components/navigation/ThemeToggle';
 
 type AuthMode = 'login' | 'register';
 
@@ -36,6 +37,11 @@ export const AuthenticationPage = () => {
         <HiArrowLeft className="w-5 h-5" />
         <span className="font-medium">Back to Home</span>
       </button>
+
+      {/* Theme Toggle */}
+      <div className="fixed top-6 right-6">
+        <ThemeToggle />
+      </div>
 
       <div className="w-full max-w-md">
         {/* Tab Switcher */}
