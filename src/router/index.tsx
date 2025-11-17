@@ -1,14 +1,12 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { UserLayout } from '../components/navigation/UserLayout';
 import { AdminLayout } from '../components/navigation/AdminLayout';
-import { HomePage } from '../pages/HomePage';
-import { AuctionsPage } from '../pages/AuctionsPage';
-import { ProfilePage } from '../pages/ProfilePage';
-import { AuthenticationPage } from '../pages/AuthenticationPage';
+import { HomePage } from '../pages/user/HomePage';
+import { AuctionsPage } from '../pages/user/AuctionsPage';
+import { ProfilePage } from '../pages/user/ProfilePage';
+import { AuthenticationPage } from '../pages/authentication/AuthenticationPage';
 import { AdminDashboardPage } from '../pages/admin/AdminDashboardPage';
-import { AdminPendingPage } from '../pages/admin/AdminPendingPage';
-import { AdminUsersPage } from '../pages/admin/AdminUsersPage';
-import { AdminSettingsPage } from '../pages/admin/AdminSettingsPage';
+import { AdminAuctionsPage } from '../pages/admin/AdminAuctionsPage';
 
 export const createUserRouter = () =>
   createBrowserRouter([
@@ -49,19 +47,7 @@ export const createAdminRouter = () =>
         },
         {
           path: 'auctions',
-          element: <AuctionsPage />,
-        },
-        {
-          path: 'pending',
-          element: <AdminPendingPage />,
-        },
-        {
-          path: 'users',
-          element: <AdminUsersPage />,
-        },
-        {
-          path: 'settings',
-          element: <AdminSettingsPage />,
+          element: <AdminAuctionsPage />,
         },
         {
           path: 'profile',

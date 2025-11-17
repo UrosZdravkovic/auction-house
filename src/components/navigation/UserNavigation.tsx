@@ -22,26 +22,24 @@ export const UserNavigation = () => {
   };
 
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>
-    `flex items-center gap-1.5 px-4 py-2 rounded-lg transition-all duration-200 relative ${isActive
-      ? 'text-primary font-semibold'
-      : 'text-text-secondary hover:text-text-primary'
-    } ${isActive ? 'after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-1/2 after:h-0.5 after:bg-primary after:rounded-full' : ''}`;
+    `flex items-center gap-1.5 px-4 py-2 rounded-full transition-all duration-200 ${isActive
+      ? 'text-gray-900 dark:text-gray-100 font-medium bg-gray-200 dark:bg-gray-800'
+      : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800'
+    }`;
 
   return (
-    <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border/50 w-full">
-      <nav className="max-w-7xl mx-auto px-6 h-16">
-        <div className="flex items-center h-full w-full">
+    <header className="sticky top-5 z-50">
+      <nav className="max-w-5xl mx-auto px-6 h-16 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-sm border border-gray-200 dark:border-gray-800 rounded-full">
+        <div className="flex items-center justify-between h-full w-full gap-8">
           {/* Logo */}
-          <div className="flex-1 min-w-0">
-            <NavLink to="/" className="flex items-center space-x-2 group">
-              <span className="text-lg font-semibold text-text-primary">
-                Auction House
-              </span>
-            </NavLink>
-          </div>
+          <NavLink to="/" className="flex items-center space-x-2 group transition-all duration-200 px-2 py-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800">
+            <span className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+              Auction House
+            </span>
+          </NavLink>
 
           {/* Centered Navigation Links */}
-          <div className="flex items-center justify-center gap-1 shrink-0">
+          <div className="flex items-center justify-center gap-1">
             {navLinks.map(({ path, label, icon: Icon }) => (
               <NavLink
                 key={path}
@@ -56,7 +54,7 @@ export const UserNavigation = () => {
           </div>
 
           {/* Right Side Actions */}
-          <div className="flex-1 flex items-center justify-end gap-3 min-w-0">
+          <div className="flex items-center gap-3">
             <ThemeToggle />
 
             {user ? (
@@ -64,18 +62,18 @@ export const UserNavigation = () => {
                 <NavLink
                   to="/profile"
                   className={({ isActive }) =>
-                    `p-2 rounded-lg transition-all duration-200 ${isActive
-                      ? 'bg-primary/10 text-primary'
-                      : 'text-text-secondary hover:bg-surface-hover hover:text-text-primary'
+                    `p-2 rounded-full transition-all duration-200 ${isActive
+                      ? 'bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-gray-100'
+                      : 'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100'
                     }`
                   }
                 >
                   <HiUserCircle className="w-5 h-5" />
                 </NavLink>
-                <div className="h-6 w-px bg-border" />
+                <div className="h-6 w-px bg-gray-300 dark:bg-gray-700" />
                 <button
                   onClick={handleLogout}
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium text-text-secondary hover:text-error hover:bg-error/10 transition-all duration-200"
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
                 >
                   <HiLogout className="w-4 h-4" />
                   <span>Logout</span>
@@ -85,13 +83,13 @@ export const UserNavigation = () => {
               <>
                 <NavLink
                   to="/auth?mode=login"
-                  className="px-4 py-1.5 text-sm font-medium text-text-primary hover:text-primary transition-colors duration-200"
+                  className="px-4 py-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-all duration-200"
                 >
                   Sign In
                 </NavLink>
                 <NavLink
                   to="/auth?mode=register"
-                  className="px-4 py-1.5 text-sm font-medium bg-primary text-white rounded-lg hover:bg-primary-hover transition-all duration-200 shadow-sm hover:shadow-md"
+                  className="px-4 py-1.5 text-sm font-medium bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 hover:shadow-md transition-all duration-200"
                 >
                   Sign Up
                 </NavLink>

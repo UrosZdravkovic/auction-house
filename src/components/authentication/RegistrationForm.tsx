@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { HiEye, HiEyeOff } from 'react-icons/hi';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../../hooks/useAuth';
 import toast from 'react-hot-toast';
 
 const registrationSchema = z.object({
@@ -45,12 +45,12 @@ export const RegistrationForm = () => {
 
   return (
     <div className="w-full max-w-md">
-      <div className="bg-surface rounded-lg border border-border p-8 shadow-lg">
+      <div className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-md rounded-2xl border border-gray-200 dark:border-gray-800 p-8 shadow-lg">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-text-primary mb-2">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
             Create Account
           </h1>
-          <p className="text-text-secondary">
+          <p className="text-gray-600 dark:text-gray-400">
             Join Auction House today
           </p>
         </div>
@@ -60,7 +60,7 @@ export const RegistrationForm = () => {
           <div>
             <label
               htmlFor="name"
-              className="block text-sm font-medium text-text-primary mb-2"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
             >
               Full Name
             </label>
@@ -68,15 +68,15 @@ export const RegistrationForm = () => {
               id="name"
               type="text"
               {...register('name')}
-              className={`w-full px-4 py-2 bg-background border rounded-lg focus:outline-none focus:ring-2 transition-colors ${
+              className={`w-full px-4 py-2.5 bg-white dark:bg-gray-800 border rounded-xl focus:outline-none focus:ring-2 transition-all ${
                 errors.name
-                  ? 'border-error focus:ring-error'
-                  : 'border-border focus:ring-primary'
-              } text-text-primary`}
+                  ? 'border-red-500 focus:ring-red-500/20'
+                  : 'border-gray-300 dark:border-gray-700 focus:ring-gray-900/10 dark:focus:ring-gray-100/10 focus:border-gray-900 dark:focus:border-gray-100'
+              } text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500`}
               placeholder="John Doe"
             />
             {errors.name && (
-              <p className="mt-1 text-sm text-error">{errors.name.message}</p>
+              <p className="mt-1.5 text-sm text-red-500">{errors.name.message}</p>
             )}
           </div>
 
@@ -84,7 +84,7 @@ export const RegistrationForm = () => {
           <div>
             <label
               htmlFor="email"
-              className="block text-sm font-medium text-text-primary mb-2"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
             >
               Email Address
             </label>
@@ -92,15 +92,15 @@ export const RegistrationForm = () => {
               id="email"
               type="email"
               {...register('email')}
-              className={`w-full px-4 py-2 bg-background border rounded-lg focus:outline-none focus:ring-2 transition-colors ${
+              className={`w-full px-4 py-2.5 bg-white dark:bg-gray-800 border rounded-xl focus:outline-none focus:ring-2 transition-all ${
                 errors.email
-                  ? 'border-error focus:ring-error'
-                  : 'border-border focus:ring-primary'
-              } text-text-primary`}
+                  ? 'border-red-500 focus:ring-red-500/20'
+                  : 'border-gray-300 dark:border-gray-700 focus:ring-gray-900/10 dark:focus:ring-gray-100/10 focus:border-gray-900 dark:focus:border-gray-100'
+              } text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500`}
               placeholder="john@example.com"
             />
             {errors.email && (
-              <p className="mt-1 text-sm text-error">{errors.email.message}</p>
+              <p className="mt-1.5 text-sm text-red-500">{errors.email.message}</p>
             )}
           </div>
 
@@ -108,7 +108,7 @@ export const RegistrationForm = () => {
           <div>
             <label
               htmlFor="password"
-              className="block text-sm font-medium text-text-primary mb-2"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
             >
               Password
             </label>
@@ -117,17 +117,17 @@ export const RegistrationForm = () => {
                 id="password"
                 type={showPassword ? 'text' : 'password'}
                 {...register('password')}
-                className={`w-full px-4 py-2 bg-background border rounded-lg focus:outline-none focus:ring-2 transition-colors ${
+                className={`w-full px-4 py-2.5 bg-white dark:bg-gray-800 border rounded-xl focus:outline-none focus:ring-2 transition-all ${
                   errors.password
-                    ? 'border-error focus:ring-error'
-                    : 'border-border focus:ring-primary'
-                } text-text-primary pr-10`}
+                    ? 'border-red-500 focus:ring-red-500/20'
+                    : 'border-gray-300 dark:border-gray-700 focus:ring-gray-900/10 dark:focus:ring-gray-100/10 focus:border-gray-900 dark:focus:border-gray-100'
+                } text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 pr-10`}
                 placeholder="••••••••"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary hover:text-text-primary transition-colors"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
               >
                 {showPassword ? (
                   <HiEyeOff className="w-5 h-5" />
@@ -137,7 +137,7 @@ export const RegistrationForm = () => {
               </button>
             </div>
             {errors.password && (
-              <p className="mt-1 text-sm text-error">
+              <p className="mt-1.5 text-sm text-red-500">
                 {errors.password.message}
               </p>
             )}
@@ -147,7 +147,7 @@ export const RegistrationForm = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full py-2 px-4 bg-primary text-white rounded-lg font-medium hover:bg-primary-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-2.5 px-4 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-xl font-medium hover:bg-gray-800 dark:hover:bg-gray-200 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
           >
             {isLoading ? 'Creating Account...' : 'Sign Up'}
           </button>
