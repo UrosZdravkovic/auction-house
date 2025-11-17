@@ -5,37 +5,27 @@
 
 /* Tailwind v4 theme configuration */
 @theme {
-  /* Colors */
+  /* Gray Minimalist Color Scheme - Light Mode */
   --color-background: #ffffff;
-  --color-surface: #f8f9fa;
-  --color-surface-hover: #f1f3f5;
-  --color-border: #e9ecef;
+  --color-surface: rgba(255, 255, 255, 0.8);
+  --color-surface-hover: #f3f4f6;
+  --color-border: #e5e7eb;
   
-  --color-text-primary: #212529;
-  --color-text-secondary: #6c757d;
-  --color-text-tertiary: #adb5bd;
+  --color-text-primary: #111827;
+  --color-text-secondary: #6b7280;
+  --color-text-tertiary: #9ca3af;
   
-  --color-primary: #3b82f6;
-  --color-primary-hover: #2563eb;
-  --color-primary-light: #dbeafe;
+  --color-primary: #111827;
+  --color-primary-hover: #1f2937;
   
-  --color-secondary: #8b5cf6;
-  --color-secondary-hover: #7c3aed;
-  --color-secondary-light: #ede9fe;
+  --color-active-bg: #e5e7eb;
+  --color-hover-bg: #f3f4f6;
   
   --color-success: #10b981;
-  --color-success-light: #d1fae5;
   --color-warning: #f59e0b;
-  --color-warning-light: #fef3c7;
   --color-error: #ef4444;
   --color-error-light: #fee2e2;
   --color-info: #06b6d4;
-  --color-info-light: #cffafe;
-  
-  --color-bid-success: #10b981;
-  --color-pending: #f59e0b;
-  --color-approved: #10b981;
-  --color-rejected: #ef4444;
   
   /* Shadows */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
@@ -63,24 +53,25 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Dark Theme */
+/* Gray Minimalist Color Scheme - Dark Mode */
 [data-theme="dark"] {
-  --color-background: #0f172a;
-  --color-surface: #1e293b;
-  --color-surface-hover: #334155;
-  --color-border: #334155;
+  --color-background: #030712;
+  --color-surface: rgba(17, 24, 39, 0.8);
+  --color-surface-hover: #1f2937;
+  --color-border: #374151;
   
-  --color-text-primary: #f1f5f9;
-  --color-text-secondary: #cbd5e1;
-  --color-text-tertiary: #64748b;
+  --color-text-primary: #f9fafb;
+  --color-text-secondary: #9ca3af;
+  --color-text-tertiary: #6b7280;
   
-  --color-primary: #60a5fa;
-  --color-primary-hover: #3b82f6;
-  --color-primary-light: #1e3a8a;
+  --color-primary: #f9fafb;
+  --color-primary-hover: #f3f4f6;
   
-  --color-secondary: #a78bfa;
-  --color-secondary-hover: #8b5cf6;
-  --color-secondary-light: #4c1d95;
+  --color-active-bg: #1f2937;
+  --color-hover-bg: #1f2937;
+  
+  --color-error: #ef4444;
+  --color-error-light: rgba(239, 68, 68, 0.1);
   
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);

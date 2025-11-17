@@ -47,12 +47,12 @@ export const LoginForm = () => {
 
   return (
     <div className="w-full max-w-md">
-      <div className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-md rounded-2xl border border-gray-200 dark:border-gray-800 p-8 shadow-lg">
+      <div className="bg-surface backdrop-blur-md rounded-2xl border border-border p-8 shadow-lg">
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-1">
+          <h1 className="text-2xl font-bold text-text-primary mb-1">
             Welcome back
           </h1>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+          <p className="text-sm text-text-secondary">
             Sign in to continue to Auction House
           </p>
         </div>
@@ -62,7 +62,7 @@ export const LoginForm = () => {
           <div className="space-y-1.5">
             <label
               htmlFor="email"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              className="block text-sm font-medium text-text-secondary"
             >
               Email
             </label>
@@ -70,15 +70,15 @@ export const LoginForm = () => {
               id="email"
               type="email"
               {...register('email')}
-              className={`w-full px-3.5 py-2.5 bg-white dark:bg-gray-800 border rounded-lg focus:outline-none focus:ring-2 transition-all ${
+              className={`w-full px-3.5 py-2.5 bg-background border rounded-lg focus:outline-none focus:ring-2 transition-all ${
                 errors.email || errors.root
-                  ? 'border-red-400 dark:border-red-500 focus:ring-red-500/20'
-                  : 'border-gray-300 dark:border-gray-700 focus:ring-gray-400/20 dark:focus:ring-gray-500/20 focus:border-gray-400 dark:focus:border-gray-500'
-              } text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500`}
+                  ? 'border-error focus:ring-error/20'
+                  : 'border-border focus:ring-primary/20 focus:border-primary'
+              } text-text-primary placeholder:text-text-tertiary`}
               placeholder="you@example.com"
             />
             {errors.email && (
-              <p className="text-xs text-red-600 dark:text-red-400 flex items-center gap-1">
+              <p className="text-xs text-error flex items-center gap-1">
                 <span>⚠</span>
                 <span>{errors.email.message}</span>
               </p>
@@ -89,7 +89,7 @@ export const LoginForm = () => {
           <div className="space-y-1.5">
             <label
               htmlFor="password"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              className="block text-sm font-medium text-text-secondary"
             >
               Password
             </label>
@@ -98,17 +98,17 @@ export const LoginForm = () => {
                 id="password"
                 type={showPassword ? 'text' : 'password'}
                 {...register('password')}
-                className={`w-full px-3.5 py-2.5 bg-white dark:bg-gray-800 border rounded-lg focus:outline-none focus:ring-2 transition-all ${
+                className={`w-full px-3.5 py-2.5 bg-background border rounded-lg focus:outline-none focus:ring-2 transition-all ${
                   errors.password || errors.root
-                    ? 'border-red-400 dark:border-red-500 focus:ring-red-500/20'
-                    : 'border-gray-300 dark:border-gray-700 focus:ring-gray-400/20 dark:focus:ring-gray-500/20 focus:border-gray-400 dark:focus:border-gray-500'
-                } text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 pr-10`}
+                    ? 'border-error focus:ring-error/20'
+                    : 'border-border focus:ring-primary/20 focus:border-primary'
+                } text-text-primary placeholder:text-text-tertiary pr-10`}
                 placeholder="Enter your password"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-text-tertiary hover:text-text-secondary transition-colors"
               >
                 {showPassword ? (
                   <HiEyeOff className="w-5 h-5" />
@@ -118,7 +118,7 @@ export const LoginForm = () => {
               </button>
             </div>
             {errors.password && (
-              <p className="text-xs text-red-600 dark:text-red-400 flex items-center gap-1">
+              <p className="text-xs text-error flex items-center gap-1">
                 <span>⚠</span>
                 <span>{errors.password.message}</span>
               </p>
@@ -127,8 +127,8 @@ export const LoginForm = () => {
 
           {/* Auth Error - Only for authentication failures */}
           {errors.root && !errors.email && !errors.password && (
-            <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-              <p className="text-sm text-red-600 dark:text-red-400 flex items-center gap-2">
+            <div className="p-3 bg-error-light border border-error rounded-lg">
+              <p className="text-sm text-error flex items-center gap-2">
                 <span>⚠</span>
                 <span>{errors.root.message}</span>
               </p>
@@ -139,7 +139,7 @@ export const LoginForm = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full py-2.5 px-4 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-lg font-medium hover:bg-gray-800 dark:hover:bg-gray-200 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md mt-6"
+            className="w-full py-2.5 px-4 bg-primary text-background rounded-lg font-medium hover:bg-primary-hover transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md mt-6"
           >
             {isLoading ? (
               <span className="flex items-center justify-center gap-2">
