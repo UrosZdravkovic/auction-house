@@ -66,23 +66,34 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   // Login funkcija
   const login = async (email: string, password: string) => {
-    await signInWithEmailAndPassword(auth, email, password);
-    // onAuthStateChanged će automatski ažurirati state
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      // onAuthStateChanged će automatski ažurirati state
+    } catch (error: any) {
+      console.log('Login error:', error);
+      // Always show user-friendly message for login errors
+      throw new Error('Wrong email or password');
+    }
   };
 
   // Signup funkcija + upis korisnika u Firestore
   const signup = async (email: string, password: string, name: string) => {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    const firebaseUser = userCredential.user;
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const firebaseUser = userCredential.user;
 
-    // Upis u Firestore users kolekciju
-    await setDoc(doc(db, "users", firebaseUser.uid), {
-      name,
-      email,
-      role: "user", // Default role for new users
-      createdAt: serverTimestamp(),
-    });
-    // onAuthStateChanged će automatski ažurirati state
+      // Upis u Firestore users kolekciju
+      await setDoc(doc(db, "users", firebaseUser.uid), {
+        name,
+        email,
+        role: "user", // Default role for new users
+        createdAt: serverTimestamp(),
+      });
+      // onAuthStateChanged će automatski ažurirati state
+    } catch (error: any) {
+      // Re-throw the error so forms can catch it
+      throw new Error(error.message || 'Failed to create account');
+    }
   };
 
   // Logout funkcija
