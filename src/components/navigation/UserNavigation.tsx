@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from 'react-router-dom';
-import { HiHome, HiViewGrid, HiUserCircle, HiLogout } from 'react-icons/hi';
+import { HiHome, HiViewGrid, HiUserCircle, HiLogout, HiPlus, HiCollection, HiCash } from 'react-icons/hi';
 import { ThemeToggle } from '../../components/navigation/ThemeToggle';
 import { useAuth } from '../../hooks/useAuth';
 
@@ -7,10 +7,19 @@ export const UserNavigation = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
-  const navLinks = [
+  const publicNavLinks = [
     { path: '/', label: 'Home', icon: HiHome },
     { path: '/auctions', label: 'Auctions', icon: HiViewGrid },
   ];
+
+  const userNavLinks = [
+    { path: '/', label: 'Home', icon: HiHome },
+    { path: '/auctions', label: 'Auctions', icon: HiViewGrid },
+    { path: '/my-auctions', label: 'My Auctions', icon: HiCollection },
+    { path: '/my-bids', label: 'My Bids', icon: HiCash },
+  ];
+
+  const navLinks = user ? userNavLinks : publicNavLinks;
 
   const handleLogout = async () => {
     try {
@@ -29,7 +38,7 @@ export const UserNavigation = () => {
 
   return (
     <header className="sticky top-5 z-50">
-      <nav className="max-w-5xl mx-auto px-6 h-16 bg-surface backdrop-blur-md shadow-sm border border-border rounded-full">
+      <nav className="max-w-7xl mx-auto px-6 h-16 bg-surface backdrop-blur-md shadow-sm border border-border rounded-full">
         <div className="flex items-center justify-between h-full w-full gap-8">
           {/* Logo */}
           <NavLink to="/" className="flex items-center space-x-2 group transition-all duration-200 px-2 py-1 rounded-full hover:cursor-pointer">
@@ -59,6 +68,14 @@ export const UserNavigation = () => {
 
             {user ? (
               <>
+                <button
+                  onClick={() => navigate('/auctions/create')}
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-primary text-background rounded-full text-sm font-medium hover:bg-primary-hover hover:shadow-md transition-all duration-200"
+                  title="Create Auction"
+                >
+                  <HiPlus className="w-4 h-4" />
+                  <span className="hidden xl:inline">Create</span>
+                </button>
                 <NavLink
                   to="/profile"
                   className={({ isActive }) =>

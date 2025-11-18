@@ -1,17 +1,29 @@
 import { collection, getDocs, getDoc, doc, addDoc, updateDoc, serverTimestamp, query, where } from "firebase/firestore";
 import { db } from "../firebase/firebase";
-import type { Auction, CreateAuctionData } from "../types";
+import type { Auction, AuctionFirestore, CreateAuctionData } from "../types";
 
 /**
- * Fetch all approved auctions from Firestore (public view)
+ * Convert Firestore auction data to app format
+ */
+const convertFirestoreToAuction = (id: string, data: any): Auction => {
+  const firestoreData = data as AuctionFirestore;
+  return {
+    ...firestoreData,
+    id,
+    startDate: firestoreData.startDate.toDate(),
+    endDate: firestoreData.endDate.toDate(),
+    createdAt: firestoreData.createdAt.toDate(),
+    reviewedAt: firestoreData.reviewedAt?.toDate(),
+  };
+};
+
+/**
+ * Fetch all active auctions from Firestore (public view)
  */
 export const fetchAuctions = async (): Promise<Auction[]> => {
-  const q = query(collection(db, 'auctions'), where('status', '==', 'approved'));
+  const q = query(collection(db, 'auctions'), where('status', '==', 'active'));
   const snapshot = await getDocs(q);
-  return snapshot.docs.map(doc => ({
-    id: doc.id,
-    ...doc.data()
-  })) as Auction[];
+  return snapshot.docs.map(doc => convertFirestoreToAuction(doc.id, doc.data()));
 };
 
 /**
@@ -22,22 +34,21 @@ export const fetchAuctionById = async (auctionId: string): Promise<Auction | nul
   if (!docSnap.exists()) {
     return null;
   }
-  return {
-    id: docSnap.id,
-    ...docSnap.data()
-  } as Auction;
+  return convertFirestoreToAuction(docSnap.id, docSnap.data());
 };
 
 /**
- * Create a new auction (defaults to pending status)
+ * Create a new auction (defaults to pending status for admin approval)
  */
 export const createAuction = async (auctionData: CreateAuctionData): Promise<string> => {
   const docRef = await addDoc(collection(db, 'auctions'), {
     ...auctionData,
-    currentBid: auctionData.startPrice,
-    bidsCount: 0,
-    status: 'pending', // New auctions start as pending
+    currentBid: auctionData.startingBid,
+    bidCount: 0,
+    status: 'pending', // New auctions start as pending for admin approval
     createdAt: serverTimestamp(),
+    startDate: serverTimestamp(),
+    endDate: auctionData.endDate, // Should be Timestamp from client
   });
   return docRef.id;
 };
@@ -48,12 +59,12 @@ export const createAuction = async (auctionData: CreateAuctionData): Promise<str
 export const updateAuctionBid = async (
   auctionId: string, 
   currentBid: number, 
-  bidsCount: number
+  bidCount: number
 ): Promise<void> => {
   const auctionRef = doc(db, 'auctions', auctionId);
   await updateDoc(auctionRef, {
     currentBid,
-    bidsCount,
+    bidCount,
   });
 };
 
@@ -63,19 +74,17 @@ export const updateAuctionBid = async (
 export const fetchPendingAuctions = async (): Promise<Auction[]> => {
   const q = query(collection(db, 'auctions'), where('status', '==', 'pending'));
   const snapshot = await getDocs(q);
-  return snapshot.docs.map(doc => ({
-    id: doc.id,
-    ...doc.data()
-  })) as Auction[];
+  return snapshot.docs.map(doc => convertFirestoreToAuction(doc.id, doc.data()));
 };
 
 /**
  * Approve an auction (Admin only)
+ * Sets status to 'active' so it appears in public listings
  */
 export const approveAuction = async (auctionId: string, adminId: string): Promise<void> => {
   const auctionRef = doc(db, 'auctions', auctionId);
   await updateDoc(auctionRef, {
-    status: 'approved',
+    status: 'active',
     reviewedBy: adminId,
     reviewedAt: serverTimestamp(),
   });
@@ -83,6 +92,7 @@ export const approveAuction = async (auctionId: string, adminId: string): Promis
 
 /**
  * Reject an auction (Admin only)
+ * Sets status to 'cancelled' so it won't appear in public listings
  */
 export const rejectAuction = async (
   auctionId: string, 
@@ -91,7 +101,7 @@ export const rejectAuction = async (
 ): Promise<void> => {
   const auctionRef = doc(db, 'auctions', auctionId);
   await updateDoc(auctionRef, {
-    status: 'rejected',
+    status: 'cancelled',
     reviewedBy: adminId,
     reviewedAt: serverTimestamp(),
     ...(reason && { rejectionReason: reason }),
