@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { fetchAuctions, fetchAuctionById, createAuction, updateAuctionBid, fetchAllAuctions } from "../services/auctionService";
+import { fetchAuctions, fetchAuctionById, createAuction, updateAuctionBid, fetchAllAuctions, fetchUsersAuction } from "../services/auctionService";
 import type { Auction } from "../types";
 
 /**
@@ -37,6 +37,14 @@ export const useCreateAuction = () => {
     },
   });
 };
+
+export const useUsersAuctions = (userId: string) => {
+  return useQuery({
+    queryKey: ['auctions', 'user', userId],
+    queryFn: () => fetchUsersAuction(userId),
+    enabled: !!userId,
+  });
+}
 
 /**
  * Hook to fetch ALL auctions (admin view)

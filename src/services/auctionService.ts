@@ -25,6 +25,12 @@ export const fetchAuctions = async (): Promise<Auction[]> => {
   return snapshot.docs.map(doc => convertFirestoreToAuction(doc.id, doc.data()));
 };
 
+export const fetchUsersAuction = async (userId: string) : Promise<Auction[]> => {
+  const q = query(collection(db, 'auctions'), where('creatorId', '==', userId));
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map(doc => convertFirestoreToAuction(doc.id, doc.data()));
+};
+
 /**
  * Fetch ALL auctions from Firestore (for debugging)
  */
