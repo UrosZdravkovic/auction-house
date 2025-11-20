@@ -26,6 +26,14 @@ export const fetchAuctions = async (): Promise<Auction[]> => {
 };
 
 /**
+ * Fetch ALL auctions from Firestore (for debugging)
+ */
+export const fetchAllAuctions = async (): Promise<Auction[]> => {
+  const snapshot = await getDocs(collection(db, 'auctions'));
+  return snapshot.docs.map(doc => convertFirestoreToAuction(doc.id, doc.data()));
+};
+
+/**
  * Fetch a single auction by ID
  */
 export const fetchAuctionById = async (auctionId: string): Promise<Auction | null> => {
