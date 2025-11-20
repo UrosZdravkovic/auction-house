@@ -1,13 +1,13 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { fetchAuctions, fetchAuctionById, createAuction, updateAuctionBid } from "../services/auctionService";
+import { fetchAuctions, fetchAuctionById, createAuction, updateAuctionBid, fetchAllAuctions } from "../services/auctionService";
 import type { Auction } from "../types";
 
 /**
- * Hook to fetch all auctions
+ * Hook to fetch all approved auctions (public view)
  */
 export const useAuctions = () => {
   return useQuery({
-    queryKey: ['auctions'],
+    queryKey: ['auctions', 'approved'],
     queryFn: fetchAuctions,
   });
 };
@@ -35,6 +35,16 @@ export const useCreateAuction = () => {
       // Invalidate and refetch auctions list
       queryClient.invalidateQueries({ queryKey: ['auctions'] });
     },
+  });
+};
+
+/**
+ * Hook to fetch ALL auctions (admin view)
+ */
+export const useAllAuctions = () => {
+  return useQuery({
+    queryKey: ['auctions', 'all'],
+    queryFn: fetchAllAuctions,
   });
 };
 

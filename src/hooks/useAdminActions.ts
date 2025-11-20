@@ -29,9 +29,7 @@ export const useApproveAuction = () => {
       return approveAuction(auctionId, user.uid);
     },
     onSuccess: () => {
-      // Invalidate pending auctions (remove from pending list)
-      queryClient.invalidateQueries({ queryKey: ['auctions', 'pending'] });
-      // Invalidate approved auctions (add to public list)
+      // Invalidate all auction queries to refresh lists
       queryClient.invalidateQueries({ queryKey: ['auctions'] });
     },
   });
@@ -50,9 +48,8 @@ export const useRejectAuction = () => {
       return rejectAuction(auctionId, user.uid, reason);
     },
     onSuccess: () => {
-      // Invalidate pending auctions (remove from pending list)
-      queryClient.invalidateQueries({ queryKey: ['auctions', 'pending'] });
-      // Note: Rejected auctions don't appear in public list
+      // Invalidate all auction queries to refresh lists
+      queryClient.invalidateQueries({ queryKey: ['auctions'] });
     },
   });
 };
