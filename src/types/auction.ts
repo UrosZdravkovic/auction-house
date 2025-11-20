@@ -45,53 +45,44 @@ export type SortOption =
 /**
  * Main Auction interface
  * Represents all data for a single auction item
+ * Aligned with Firebase structure
  */
 export interface Auction {
   id: string;                           // Unique identifier (from Firebase)
   title: string;                        // Auction title/name
   description: string;                  // Detailed description of the item
-  category: AuctionCategory;            // Item category
+  category: string;                     // Item category (matches Firebase structure)
   imageUrl: string;                     // Main image URL
-  images?: string[];                    // Additional images (optional)
   
-  // Pricing & Bidding
-  startingBid: number;                  // Minimum bid to start auction
-  currentBid: number;                   // Current highest bid
-  bidCount: number;                     // Total number of bids placed
+  // Pricing & Bidding (matching Firebase field names)
+  startPrice: number;                   // Starting price (Firebase: startPrice)
+  currentBid: number;                   // Current highest bid (Firebase: currentBid)
+  bidsCount: number;                    // Total number of bids (Firebase: bidsCount)
   
   // Timing
-  startDate: Date;                      // When auction starts
-  endDate: Date;                        // When auction ends
   createdAt: Date;                      // When auction was created
+  endsAt: Date;                         // When auction ends (Firebase: endsAt)
   
-  // Status & Ownership
-  lifecycleStatus: AuctionLifecycleStatus; // Current lifecycle status (draft/active/ended/cancelled)
-  approvalStatus: AuctionApprovalStatus;   // Admin approval status (pending/approved/rejected)
-  creatorId: string;                    // User ID who created the auction
-  creatorName: string;                  // Display name of creator
+  // Status & Ownership (matching Firebase)
+  status: AuctionApprovalStatus;        // Admin approval status (pending/approved/rejected)
+  ownerId: string;                      // User ID who created the auction (Firebase: ownerId)
   
   // Admin Review
   reviewedBy?: string;                  // Admin ID who reviewed
   reviewedAt?: Date;                    // When it was reviewed
   rejectionReason?: string;             // Reason if rejected
-  
-  // Winner info (after auction ends)
-  winnerId?: string;                    // User ID of winning bidder (if ended)
-  winningBid?: number;                  // Final winning bid amount (if ended)
 }
 
 /**
  * Represents a bid placed on an auction
- * Used for tracking bid history and user's bids
+ * Aligned with Firebase structure
  */
 export interface Bid {
   id: string;                    // Unique bid identifier
-  auctionId: string;             // Which auction this bid is for
-  userId: string;                // Who placed the bid
-  userName: string;              // Bidder's display name
-  amount: number;                // Bid amount
-  timestamp: Date;               // When bid was placed
-  isWinning: boolean;            // Is this currently the winning bid
+  auctionId: string;             // Which auction this bid is for (Firebase: auctionId)
+  userId: string;                // Who placed the bid (Firebase: userId)
+  amount: number;                // Bid amount (Firebase: amount)
+  createdAt: Date;               // When bid was placed (Firebase: createdAt)
 }
 
 /**
@@ -100,39 +91,37 @@ export interface Bid {
  */
 export interface AuctionFilters {
   searchQuery: string;                              // Text search term
-  category: AuctionCategory | 'All Categories';     // Selected category
+  category: string | 'All Categories';              // Selected category
   sortBy: SortOption;                               // Sort order
-  lifecycleStatus?: AuctionLifecycleStatus;         // Optional lifecycle status filter
-  approvalStatus?: AuctionApprovalStatus;           // Optional approval status filter (for admin)
+  status?: AuctionApprovalStatus;                   // Optional status filter
 }
 
 /**
- * Firebase Firestore version of Auction
- * Uses Timestamp instead of Date for Firebase compatibility
+ * Firestore version of Auction (uses Timestamp instead of Date)
+ * Used when reading/writing to Firebase
  */
-export interface AuctionFirestore extends Omit<Auction, 'startDate' | 'endDate' | 'createdAt' | 'reviewedAt'> {
-  startDate: Timestamp;
-  endDate: Timestamp;
+export interface AuctionFirestore extends Omit<Auction, 'createdAt' | 'endsAt' | 'reviewedAt'> {
   createdAt: Timestamp;
+  endsAt: Timestamp;
   reviewedAt?: Timestamp;
 }
 
 /**
- * Firebase Firestore version of Bid
- * Uses Timestamp instead of Date
+ * Firestore version of Bid (uses Timestamp instead of Date)
+ * Used when reading/writing to Firebase
  */
-export interface BidFirestore extends Omit<Bid, 'timestamp'> {
-  timestamp: Timestamp;
+export interface BidFirestore extends Omit<Bid, 'createdAt'> {
+  createdAt: Timestamp;
 }
 
 /**
  * Data required to create a new auction (before Firebase adds id and timestamps)
  */
 export type CreateAuctionData = Omit<Auction, 
-  'id' | 'createdAt' | 'currentBid' | 'bidCount' | 'lifecycleStatus' | 'approvalStatus' | 'reviewedBy' | 'reviewedAt' | 'rejectionReason' | 'winnerId' | 'winningBid'
+  'id' | 'createdAt' | 'currentBid' | 'bidsCount' | 'status' | 'reviewedBy' | 'reviewedAt' | 'rejectionReason'
 >;
 
 /**
  * Data required to create a new bid
  */
-export type CreateBidData = Omit<Bid, 'id' | 'timestamp' | 'isWinning'>;
+export type CreateBidData = Omit<Bid, 'id' | 'createdAt'>;

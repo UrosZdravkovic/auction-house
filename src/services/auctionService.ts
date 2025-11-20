@@ -10,18 +10,17 @@ const convertFirestoreToAuction = (id: string, data: any): Auction => {
   return {
     ...firestoreData,
     id,
-    startDate: firestoreData.startDate.toDate(),
-    endDate: firestoreData.endDate.toDate(),
     createdAt: firestoreData.createdAt.toDate(),
+    endsAt: firestoreData.endsAt.toDate(),
     reviewedAt: firestoreData.reviewedAt?.toDate(),
   };
 };
 
 /**
- * Fetch all active auctions from Firestore (public view)
+ * Fetch all approved auctions from Firestore (public view)
  */
 export const fetchAuctions = async (): Promise<Auction[]> => {
-  const q = query(collection(db, 'auctions'), where('status', '==', 'active'));
+  const q = query(collection(db, 'auctions'), where('status', '==', 'approved'));
   const snapshot = await getDocs(q);
   return snapshot.docs.map(doc => convertFirestoreToAuction(doc.id, doc.data()));
 };
@@ -43,12 +42,10 @@ export const fetchAuctionById = async (auctionId: string): Promise<Auction | nul
 export const createAuction = async (auctionData: CreateAuctionData): Promise<string> => {
   const docRef = await addDoc(collection(db, 'auctions'), {
     ...auctionData,
-    currentBid: auctionData.startingBid,
-    bidCount: 0,
+    currentBid: auctionData.startPrice,
+    bidsCount: 0,
     status: 'pending', // New auctions start as pending for admin approval
     createdAt: serverTimestamp(),
-    startDate: serverTimestamp(),
-    endDate: auctionData.endDate, // Should be Timestamp from client
   });
   return docRef.id;
 };
@@ -59,12 +56,12 @@ export const createAuction = async (auctionData: CreateAuctionData): Promise<str
 export const updateAuctionBid = async (
   auctionId: string, 
   currentBid: number, 
-  bidCount: number
+  bidsCount: number
 ): Promise<void> => {
   const auctionRef = doc(db, 'auctions', auctionId);
   await updateDoc(auctionRef, {
     currentBid,
-    bidCount,
+    bidsCount,
   });
 };
 
@@ -79,12 +76,12 @@ export const fetchPendingAuctions = async (): Promise<Auction[]> => {
 
 /**
  * Approve an auction (Admin only)
- * Sets status to 'active' so it appears in public listings
+ * Sets status to 'approved' so it appears in public listings
  */
 export const approveAuction = async (auctionId: string, adminId: string): Promise<void> => {
   const auctionRef = doc(db, 'auctions', auctionId);
   await updateDoc(auctionRef, {
-    status: 'active',
+    status: 'approved',
     reviewedBy: adminId,
     reviewedAt: serverTimestamp(),
   });
@@ -92,7 +89,7 @@ export const approveAuction = async (auctionId: string, adminId: string): Promis
 
 /**
  * Reject an auction (Admin only)
- * Sets status to 'cancelled' so it won't appear in public listings
+ * Sets status to 'rejected' so it won't appear in public listings
  */
 export const rejectAuction = async (
   auctionId: string, 
@@ -101,7 +98,7 @@ export const rejectAuction = async (
 ): Promise<void> => {
   const auctionRef = doc(db, 'auctions', auctionId);
   await updateDoc(auctionRef, {
-    status: 'cancelled',
+    status: 'rejected',
     reviewedBy: adminId,
     reviewedAt: serverTimestamp(),
     ...(reason && { rejectionReason: reason }),
