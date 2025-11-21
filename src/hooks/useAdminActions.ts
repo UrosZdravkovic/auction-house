@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { fetchPendingAuctions, approveAuction, rejectAuction } from "../services/auctionService";
+import { fetchPendingAuctions, approveAuction, rejectAuction, fetchAllAuctions } from "../services/auctionService";
 import { useAuth } from "./useAuth";
 import type { Auction } from "../types";
 
@@ -13,6 +13,16 @@ export const usePendingAuctions = () => {
     queryKey: ['auctions', 'pending'],
     queryFn: fetchPendingAuctions,
     enabled: isAdmin, // Only fetch if user is admin
+  });
+};
+
+/**
+ * Hook to fetch ALL auctions (admin view)
+ */
+export const useAllAuctions = () => {
+  return useQuery({
+    queryKey: ['auctions', 'all'],
+    queryFn: fetchAllAuctions,
   });
 };
 

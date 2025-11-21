@@ -8,36 +8,29 @@ interface AdminAuctionCardProps {
 
 export const AdminAuctionCard = ({ auction }: AdminAuctionCardProps) => {
   const [showRejectModal, setShowRejectModal] = useState(false);
-  const [rejectReason, setRejectReason] = useState("");
+  const [rejectionReason, setRejectionReason] = useState("");
 
   const approveMutation = useApproveAuction();
   const rejectMutation = useRejectAuction();
 
-  const handleApprove = async () => {
-    if (!confirm(`Approve auction "${auction.title}"?`)) return;
-
-    try {
-      await approveMutation.mutateAsync(auction.id);
-    } catch (error) {
-      console.error("Failed to approve auction:", error);
-      alert("Failed to approve auction. Please try again.");
-    }
+  const handleApprove = () => {
+    approveMutation.mutate(auction.id);
   };
 
-  const handleReject = async () => {
-    if (!rejectReason.trim()) {
+  const handleReject = () => {
+    if (!rejectionReason.trim()) {
       alert("Please provide a reason for rejection");
       return;
     }
-
-    try {
-      await rejectMutation.mutateAsync({ auctionId: auction.id, reason: rejectReason });
-      setShowRejectModal(false);
-      setRejectReason("");
-    } catch (error) {
-      console.error("Failed to reject auction:", error);
-      alert("Failed to reject auction. Please try again.");
-    }
+    rejectMutation.mutate(
+      { auctionId: auction.id, reason: rejectionReason },
+      {
+        onSuccess: () => {
+          setShowRejectModal(false);
+          setRejectionReason("");
+        },
+      }
+    );
   };
 
   const isProcessing = approveMutation.isPending || rejectMutation.isPending;
@@ -116,34 +109,35 @@ export const AdminAuctionCard = ({ auction }: AdminAuctionCardProps) => {
             </p>
 
             {/* Auction Details Grid */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4 text-sm">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm mb-4">
               <div>
-                <span className="text-text-secondary block">Category</span>
+                <span className="text-text-secondary block mb-1">Category</span>
                 <span className="font-medium text-text-primary capitalize">
                   {auction.category}
                 </span>
               </div>
               <div>
-                <span className="text-text-secondary block">Starting Price</span>
+                <span className="text-text-secondary block mb-1">Starting Price</span>
                 <span className="font-medium text-text-primary">
                   ${auction.startPrice.toLocaleString()}
                 </span>
               </div>
               <div>
-                <span className="text-text-secondary block">Current Bid</span>
+                <span className="text-text-secondary block mb-1">Current Bid</span>
                 <span className="font-medium text-text-primary">
                   ${auction.currentBid.toLocaleString()}
                 </span>
               </div>
               <div>
-                <span className="text-text-secondary block">Total Bids</span>
+                <span className="text-text-secondary block mb-1">Total Bids</span>
                 <span className="font-medium text-text-primary">
                   {auction.bidsCount}
                 </span>
               </div>
             </div>
 
-            <div className="flex items-center gap-4 text-xs text-text-secondary mb-4">
+            {/* Dates */}
+            <div className="flex items-center gap-4 text-xs text-text-secondary mb-4 pb-4 border-b border-border">
               <div>
                 <span>Created: </span>
                 <span className="font-medium">
@@ -166,7 +160,24 @@ export const AdminAuctionCard = ({ auction }: AdminAuctionCardProps) => {
               )}
             </div>
 
-            {/* Rejection Reason */}
+            {/* Error Messages */}
+            {approveMutation.isError && (
+              <div className="bg-red-500/10 border border-red-500/20 rounded-md p-3 mb-4">
+                <p className="text-sm text-red-600">
+                  {approveMutation.error?.message || "Failed to approve auction"}
+                </p>
+              </div>
+            )}
+
+            {rejectMutation.isError && (
+              <div className="bg-red-500/10 border border-red-500/20 rounded-md p-3 mb-4">
+                <p className="text-sm text-red-600">
+                  {rejectMutation.error?.message || "Failed to reject auction"}
+                </p>
+              </div>
+            )}
+
+            {/* Rejection Reason (if rejected) */}
             {auction.status === "rejected" && auction.rejectionReason && (
               <div className="bg-red-500/5 border border-red-500/20 rounded-md p-3 mb-4">
                 <p className="text-xs text-red-600 font-medium mb-1">Rejection Reason:</p>
@@ -174,7 +185,7 @@ export const AdminAuctionCard = ({ auction }: AdminAuctionCardProps) => {
               </div>
             )}
 
-            {/* Action Buttons */}
+            {/* Action Buttons Based on Status */}
             <div className="flex gap-3">
               {auction.status === "pending" && (
                 <>
@@ -183,7 +194,7 @@ export const AdminAuctionCard = ({ auction }: AdminAuctionCardProps) => {
                     disabled={isProcessing}
                     className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {isProcessing ? "Processing..." : "Approve"}
+                    {approveMutation.isPending ? "Approving..." : "Approve"}
                   </button>
                   <button
                     onClick={() => setShowRejectModal(true)}
@@ -201,7 +212,7 @@ export const AdminAuctionCard = ({ auction }: AdminAuctionCardProps) => {
                   disabled={isProcessing}
                   className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Revoke Approval
+                  {rejectMutation.isPending ? "Rejecting..." : "Reject Auction"}
                 </button>
               )}
 
@@ -211,7 +222,7 @@ export const AdminAuctionCard = ({ auction }: AdminAuctionCardProps) => {
                   disabled={isProcessing}
                   className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {isProcessing ? "Processing..." : "Re-approve"}
+                  {approveMutation.isPending ? "Approving..." : "Approve Auction"}
                 </button>
               )}
             </div>
@@ -229,19 +240,22 @@ export const AdminAuctionCard = ({ auction }: AdminAuctionCardProps) => {
             <p className="text-text-secondary text-sm mb-4">
               Please provide a reason for rejecting "{auction.title}"
             </p>
+
             <textarea
-              value={rejectReason}
-              onChange={(e) => setRejectReason(e.target.value)}
+              value={rejectionReason}
+              onChange={(e) => setRejectionReason(e.target.value)}
               placeholder="Enter rejection reason..."
               rows={4}
               className="w-full px-4 py-2 bg-background border border-border rounded-md text-text-primary placeholder:text-text-secondary/50 focus:outline-none focus:ring-2 focus:ring-primary/50 mb-4"
               disabled={isProcessing}
             />
+
             <div className="flex gap-3 justify-end">
               <button
                 onClick={() => {
                   setShowRejectModal(false);
-                  setRejectReason("");
+                  setRejectionReason("");
+                  rejectMutation.reset();
                 }}
                 disabled={isProcessing}
                 className="px-4 py-2 bg-active-bg hover:bg-hover-bg text-text-primary text-sm font-medium rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
@@ -250,10 +264,10 @@ export const AdminAuctionCard = ({ auction }: AdminAuctionCardProps) => {
               </button>
               <button
                 onClick={handleReject}
-                disabled={isProcessing}
+                disabled={isProcessing || !rejectionReason.trim()}
                 className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isProcessing ? "Processing..." : "Reject Auction"}
+                {rejectMutation.isPending ? "Rejecting..." : "Reject Auction"}
               </button>
             </div>
           </div>
