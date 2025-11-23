@@ -21,6 +21,14 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     // Apply theme to document root
     document.documentElement.setAttribute('data-theme', theme);
+    
+    // Also toggle .dark class for ShadCN compatibility
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    
     // Save preference
     localStorage.setItem('theme', theme);
   }, [theme]);
