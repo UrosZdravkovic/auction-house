@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { useApproveAuction, useRejectAuction } from "../../hooks/useAdminActions";
+import { useApproveAuction } from "../../hooks/useAdminActions";
+import { RejectAuctionDialog } from "./RejectAuctionDialog";
 import type { Auction } from "../../types";
 
 interface AdminAuctionCardProps {
@@ -7,33 +8,15 @@ interface AdminAuctionCardProps {
 }
 
 export const AdminAuctionCard = ({ auction }: AdminAuctionCardProps) => {
-  const [showRejectModal, setShowRejectModal] = useState(false);
-  const [rejectionReason, setRejectionReason] = useState("");
+  const [showRejectDialog, setShowRejectDialog] = useState(false);
 
   const approveMutation = useApproveAuction();
-  const rejectMutation = useRejectAuction();
 
   const handleApprove = () => {
     approveMutation.mutate(auction.id);
   };
 
-  const handleReject = () => {
-    if (!rejectionReason.trim()) {
-      alert("Please provide a reason for rejection");
-      return;
-    }
-    rejectMutation.mutate(
-      { auctionId: auction.id, reason: rejectionReason },
-      {
-        onSuccess: () => {
-          setShowRejectModal(false);
-          setRejectionReason("");
-        },
-      }
-    );
-  };
-
-  const isProcessing = approveMutation.isPending || rejectMutation.isPending;
+  const isProcessing = approveMutation.isPending;
 
   const getStatusBadge = () => {
     const baseClasses = "inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide";
@@ -169,14 +152,6 @@ export const AdminAuctionCard = ({ auction }: AdminAuctionCardProps) => {
               </div>
             )}
 
-            {rejectMutation.isError && (
-              <div className="bg-red-500/10 border border-red-500/20 rounded-md p-3 mb-4">
-                <p className="text-sm text-red-600">
-                  {rejectMutation.error?.message || "Failed to reject auction"}
-                </p>
-              </div>
-            )}
-
             {/* Rejection Reason (if rejected) */}
             {auction.status === "rejected" && auction.rejectionReason && (
               <div className="bg-red-500/5 border border-red-500/20 rounded-md p-3 mb-4">
@@ -197,7 +172,7 @@ export const AdminAuctionCard = ({ auction }: AdminAuctionCardProps) => {
                     {approveMutation.isPending ? "Approving..." : "Approve"}
                   </button>
                   <button
-                    onClick={() => setShowRejectModal(true)}
+                    onClick={() => setShowRejectDialog(true)}
                     disabled={isProcessing}
                     className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
@@ -208,11 +183,11 @@ export const AdminAuctionCard = ({ auction }: AdminAuctionCardProps) => {
 
               {auction.status === "approved" && (
                 <button
-                  onClick={() => setShowRejectModal(true)}
+                  onClick={() => setShowRejectDialog(true)}
                   disabled={isProcessing}
                   className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {rejectMutation.isPending ? "Rejecting..." : "Reject Auction"}
+                  Reject Auction
                 </button>
               )}
 
@@ -230,49 +205,12 @@ export const AdminAuctionCard = ({ auction }: AdminAuctionCardProps) => {
         </div>
       </div>
 
-      {/* Reject Modal */}
-      {showRejectModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-surface rounded-lg border border-border max-w-md w-full p-6">
-            <h3 className="text-xl font-semibold text-text-primary mb-4">
-              Reject Auction
-            </h3>
-            <p className="text-text-secondary text-sm mb-4">
-              Please provide a reason for rejecting "{auction.title}"
-            </p>
-
-            <textarea
-              value={rejectionReason}
-              onChange={(e) => setRejectionReason(e.target.value)}
-              placeholder="Enter rejection reason..."
-              rows={4}
-              className="w-full px-4 py-2 bg-background border border-border rounded-md text-text-primary placeholder:text-text-secondary/50 focus:outline-none focus:ring-2 focus:ring-primary/50 mb-4"
-              disabled={isProcessing}
-            />
-
-            <div className="flex gap-3 justify-end">
-              <button
-                onClick={() => {
-                  setShowRejectModal(false);
-                  setRejectionReason("");
-                  rejectMutation.reset();
-                }}
-                disabled={isProcessing}
-                className="px-4 py-2 bg-active-bg hover:bg-hover-bg text-text-primary text-sm font-medium rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleReject}
-                disabled={isProcessing || !rejectionReason.trim()}
-                className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {rejectMutation.isPending ? "Rejecting..." : "Reject Auction"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <RejectAuctionDialog
+        auctionId={auction.id}
+        auctionTitle={auction.title}
+        open={showRejectDialog}
+        onOpenChange={setShowRejectDialog}
+      />
     </>
   );
 };
