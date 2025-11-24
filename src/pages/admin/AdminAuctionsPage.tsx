@@ -9,16 +9,35 @@ export const AdminAuctionsPage = () => {
 
 
   return (
-    <>
-      {isLoading && <div>Loading all auctions...</div>}
-      {isError && <div>Error loading auctions.</div>}
+    <div className="container mx-auto px-6 py-8">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-text-primary mb-2">
+          Manage Auctions
+        </h1>
+        <p className="text-text-secondary">
+          Review and manage all auctions in the system
+        </p>
+      </div>
+
+      {isLoading && (
+        <div className="text-center py-12">
+          <p className="text-text-secondary">Loading all auctions...</p>
+        </div>
+      )}
+      
+      {isError && (
+        <div className="bg-red-500/10 border border-red-500/20 rounded-md p-4 text-center">
+          <p className="text-red-600">Error loading auctions.</p>
+        </div>
+      )}
+      
       {!isLoading && !isError && (
-        <div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {auctions?.map(auction => (
             <AdminAuctionCard key={auction.id} auction={auction} />
           ))}
         </div>
       )}
-    </>
+    </div>
   )
 }

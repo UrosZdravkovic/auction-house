@@ -1,16 +1,20 @@
 import { NavLink, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { 
   HiViewGrid, 
   HiUserCircle, 
   HiChartBar,
-  HiLogout
+  HiLogout,
+  HiPlus
 } from 'react-icons/hi';
 import { ThemeToggle } from '../../components/navigation/ThemeToggle';
 import { useAuth } from '../../hooks/useAuth';
+import { AddAuctionDialog } from '../auction/AddAuctionDialog';
 
 export const AdminNavigation = () => {
   const { logout } = useAuth();
   const navigate = useNavigate();
+  const [showAddDialog, setShowAddDialog] = useState(false);
 
   const navLinks = [
     { path: '/', label: 'Dashboard', icon: HiChartBar },
@@ -63,6 +67,16 @@ export const AdminNavigation = () => {
 
           {/* Right Side Actions */}
           <div className="flex items-center gap-3">
+            <button
+              onClick={() => setShowAddDialog(true)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium text-white bg-primary hover:bg-primary/90 transition-all duration-200"
+            >
+              <HiPlus className="w-4 h-4" />
+              <span>Create Auction</span>
+            </button>
+
+            <div className="h-6 w-px bg-border" />
+
             <ThemeToggle />
             
             <NavLink
@@ -89,6 +103,8 @@ export const AdminNavigation = () => {
           </div>
         </div>
       </nav>
+
+      <AddAuctionDialog open={showAddDialog} onOpenChange={setShowAddDialog} />
     </header>
   );
 };
