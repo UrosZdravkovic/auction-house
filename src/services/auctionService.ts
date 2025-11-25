@@ -1,4 +1,4 @@
-import { collection, getDocs, getDoc, doc, addDoc, updateDoc, serverTimestamp, query, where } from "firebase/firestore";
+import { collection, getDocs, getDoc, doc, addDoc, updateDoc, deleteDoc, serverTimestamp, query, where } from "firebase/firestore";
 import { db } from "../firebase/firebase";
 import type { Auction, AuctionFirestore, CreateAuctionData } from "../types";
 
@@ -119,4 +119,13 @@ export const rejectAuction = async (
     reviewedAt: serverTimestamp(),
     ...(reason && { rejectionReason: reason }),
   });
+};
+
+/**
+ * Delete an auction (Admin only)
+ * Permanently removes the auction from Firestore
+ */
+export const deleteAuction = async (auctionId: string): Promise<void> => {
+  const auctionRef = doc(db, 'auctions', auctionId);
+  await deleteDoc(auctionRef);
 };

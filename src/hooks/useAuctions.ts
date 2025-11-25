@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { fetchAuctions, fetchAuctionById, createAuction, updateAuctionBid, fetchUsersAuction } from "../services/auctionService";
+import { fetchAuctions, fetchAuctionById, createAuction, updateAuctionBid, fetchUsersAuction, deleteAuction } from "../services/auctionService";
 import type { Auction } from "../types";
 
 /**
@@ -60,6 +60,21 @@ export const useUpdateAuction = () => {
     onSuccess: (_, variables) => {
       // Invalidate specific auction and auctions list
       queryClient.invalidateQueries({ queryKey: ['auction', variables.auctionId] });
+      queryClient.invalidateQueries({ queryKey: ['auctions'] });
+    },
+  });
+};
+
+/**
+ * Hook to delete an auction (Admin only)
+ */
+export const useDeleteAuction = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (auctionId: string) => deleteAuction(auctionId),
+    onSuccess: () => {
+      // Invalidate and refetch all auctions lists
       queryClient.invalidateQueries({ queryKey: ['auctions'] });
     },
   });

@@ -3,14 +3,14 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
-// 🔑 Tvoja konfiguracija (kopiraš iz Firebase konzole)
+// Firebase configuration from environment variables
 const firebaseConfig = {
-  apiKey: "AIzaSyBy5uMmMxMzqTW6qzFwuRyEjpAXqvs5I4M",
-  authDomain: "auction-house-9dbf2.firebaseapp.com",
-  projectId: "auction-house-9dbf2",
-  storageBucket: "auction-house-9dbf2.firebasestorage.app",
-  messagingSenderId: "948639571128",
-  appId: "1:948639571128:web:bde052e81eff112743684d"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
 // 🔥 Inicijalizacija Firebase-a
