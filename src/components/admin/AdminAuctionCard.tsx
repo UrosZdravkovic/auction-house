@@ -3,6 +3,7 @@ import { useApproveAuction } from "../../hooks/useAdminActions";
 import { RejectAuctionDialog } from "./RejectAuctionDialog";
 import { DeleteAuctionDialog } from "./DeleteAuctionDialog";
 import { getThumbnailUrl } from "../../services/storageService";
+import { getTimeRemaining } from "../../utils/timeUtils";
 import type { Auction } from "../../types";
 
 interface AdminAuctionCardProps {
@@ -107,7 +108,17 @@ export const AdminAuctionCard = ({ auction }: AdminAuctionCardProps) => {
                 <span className="opacity-75">Ends:</span>{" "}
                 <span className="font-medium">{new Date(auction.endsAt).toLocaleDateString()}</span>
               </div>
-              {auction.reviewedAt && (
+              {auction.status === "approved" ? (
+                <>
+                  <div className="w-px h-3 bg-border" />
+                  <div>
+                    <span className="opacity-75">Time Left:</span>{" "}
+                    <span className="font-medium text-green-600">
+                      {getTimeRemaining(new Date(auction.endsAt))}
+                    </span>
+                  </div>
+                </>
+              ) : auction.reviewedAt ? (
                 <>
                   <div className="w-px h-3 bg-border" />
                   <div>
@@ -115,7 +126,7 @@ export const AdminAuctionCard = ({ auction }: AdminAuctionCardProps) => {
                     <span className="font-medium">{new Date(auction.reviewedAt).toLocaleDateString()}</span>
                   </div>
                 </>
-              )}
+              ) : null}
             </div>
 
             {/* Error Messages */}
