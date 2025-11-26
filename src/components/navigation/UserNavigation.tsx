@@ -1,20 +1,21 @@
 import { NavLink, useNavigate } from 'react-router-dom';
-import { HiHome, HiViewGrid, HiUserCircle, HiLogout, HiPlus, HiCollection, HiCash } from 'react-icons/hi';
+import { useState } from 'react';
+import { HiViewGrid, HiUserCircle, HiLogout, HiPlus, HiCollection, HiCash } from 'react-icons/hi';
 import { ThemeToggle } from '../../components/navigation/ThemeToggle';
 import { useAuth } from '../../hooks/useAuth';
+import { AddAuctionDialog } from '../auction/AddAuctionDialog';
 
 export const UserNavigation = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const [showAddDialog, setShowAddDialog] = useState(false);
 
   const publicNavLinks = [
-    { path: '/', label: 'Home', icon: HiHome },
-    { path: '/auctions', label: 'Auctions', icon: HiViewGrid },
+    { path: '/', label: 'Auctions', icon: HiViewGrid },
   ];
 
   const userNavLinks = [
-    { path: '/', label: 'Home', icon: HiHome },
-    { path: '/auctions', label: 'Auctions', icon: HiViewGrid },
+    { path: '/', label: 'Auctions', icon: HiViewGrid },
     { path: '/my-auctions', label: 'My Auctions', icon: HiCollection },
     { path: '/my-bids', label: 'My Bids', icon: HiCash },
   ];
@@ -64,18 +65,22 @@ export const UserNavigation = () => {
 
           {/* Right Side Actions */}
           <div className="flex items-center gap-2">
+            {user && (
+              <button
+                onClick={() => setShowAddDialog(true)}
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-primary text-white rounded-full text-sm font-medium hover:bg-primary/90 transition-all duration-200"
+              >
+                <HiPlus className="w-4 h-4" />
+                <span>Create Auction</span>
+              </button>
+            )}
+
+            <div className="h-6 w-px bg-border" />
+
             <ThemeToggle />
 
             {user ? (
               <>
-                <button
-                  onClick={() => navigate('/auctions/create')}
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-primary text-background rounded-full text-sm font-medium hover:bg-primary-hover hover:shadow-md transition-all duration-200"
-                  title="Create Auction"
-                >
-                  <HiPlus className="w-4 h-4" />
-                  <span className="hidden xl:inline">Create</span>
-                </button>
                 <NavLink
                   to="/profile"
                   className={({ isActive }) =>
@@ -115,6 +120,11 @@ export const UserNavigation = () => {
           </div>
         </div>
       </nav>
+
+      <AddAuctionDialog
+        open={showAddDialog}
+        onOpenChange={setShowAddDialog}
+      />
     </header>
   );
 };

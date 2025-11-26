@@ -1,8 +1,8 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { UserLayout } from '../components/navigation/UserLayout';
 import { AdminLayout } from '../components/navigation/AdminLayout';
-import { HomePage } from '../pages/user/HomePage';
 import AuctionsPage from '../pages/user/AuctionsPage';
+import MyAuctionsPage from '../pages/user/MyAuctionsPage';
 import { ProfilePage } from '../pages/user/ProfilePage';
 import { AuthenticationPage } from '../pages/authentication/AuthenticationPage';
 import { AdminDashboardPage } from '../pages/admin/AdminDashboardPage';
@@ -16,11 +16,15 @@ export const createUserRouter = () =>
       children: [
         {
           index: true,
-          element: <HomePage />,
+          element: <AuctionsPage />,
         },
         {
           path: 'auctions',
           element: <AuctionsPage />,
+        },
+        {
+          path: 'my-auctions',
+          element: <MyAuctionsPage />,
         },
         {
           path: 'profile',

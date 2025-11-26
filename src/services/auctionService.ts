@@ -28,7 +28,7 @@ export const fetchAuctions = async (): Promise<Auction[]> => {
 
 
 export const fetchUsersAuction = async (userId: string) : Promise<Auction[]> => {
-  const q = query(collection(db, 'auctions'), where('creatorId', '==', userId));
+  const q = query(collection(db, 'auctions'), where('ownerId', '==', userId));
   const snapshot = await getDocs(q);
   return snapshot.docs.map(doc => convertFirestoreToAuction(doc.id, doc.data()));
 };
