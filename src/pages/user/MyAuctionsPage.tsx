@@ -65,7 +65,7 @@ export default function MyAuctionsPage() {
                     {/* Image Section */}
                     <div className="relative md:w-2/5 h-48 md:h-full">
                       <img
-                        src={getThumbnailUrl(auction.imageUrl, 600, 400)}
+                        src={getThumbnailUrl((auction.imageUrls?.[0] || (auction as any).imageUrl) || "", 600, 400)}
                         alt={auction.title}
                         className="w-full h-full object-cover"
                       />

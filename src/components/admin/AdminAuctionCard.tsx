@@ -22,139 +22,135 @@ export const AdminAuctionCard = ({ auction }: AdminAuctionCardProps) => {
 
   const isProcessing = approveMutation.isPending;
 
-  const getStatusBorderColor = () => {
+  const getStatusConfig = () => {
     switch (auction.status) {
       case "pending":
-        return "border-yellow-500";
+        return { 
+          bgClass: "bg-warning/15", 
+          textClass: "text-warning", 
+          label: "Awaiting Review" 
+        };
       case "approved":
-        return "border-green-500";
+        return { 
+          bgClass: "bg-success/15", 
+          textClass: "text-success", 
+          label: "Active" 
+        };
       case "rejected":
-        return "border-red-500";
+        return { 
+          bgClass: "bg-error/15", 
+          textClass: "text-error", 
+          label: "Declined" 
+        };
       default:
-        return "border-border";
+        return { 
+          bgClass: "bg-surface-hover", 
+          textClass: "text-text-secondary", 
+          label: auction.status 
+        };
     }
   };
 
+  const statusConfig = getStatusConfig();
+
   return (
     <>
-      <div className={`bg-surface border-2 ${getStatusBorderColor()} rounded-lg overflow-hidden hover:shadow-lg transition-all duration-200 h-64`}>
-        {/* Horizontal Layout: Image Left, Content Right */}
-        <div className="flex flex-col md:flex-row h-full">
-          {/* Image Section - Takes 40% width on desktop */}
-          <div className="relative md:w-2/5 h-48 md:h-full">
+      <div className="group bg-surface border border-border rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 hover:border-primary/30">
+        <div className="flex gap-4 p-4">
+          {/* Compact Image - Left Side */}
+          <div className="relative w-28 h-28 shrink-0 bg-surface-hover rounded-lg overflow-hidden">
             <img
-              src={getThumbnailUrl(auction.imageUrl, 600, 400)}
+              src={getThumbnailUrl((auction.imageUrls?.[0] || (auction as any).imageUrl) || "", 300, 300)}
               alt={auction.title}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
             />
+            {/* Status Indicator - Small Corner Badge */}
+            <div className={`absolute top-2 left-2 w-2.5 h-2.5 rounded-full ${statusConfig.bgClass} border-2 border-surface shadow-sm`} />
           </div>
 
-          {/* Content Section - Takes 60% width on desktop */}
-          <div className="flex-1 p-5 flex flex-col relative">
-            {/* Delete Button - Top Right Corner */}
-            <button
-              onClick={() => setShowDeleteDialog(true)}
-              disabled={isProcessing}
-              className="absolute top-3 right-3 p-2 text-gray-400 hover:text-red-500 hover:bg-red-500/10 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              title="Delete auction"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-              </svg>
-            </button>
-
-            {/* Header: Title and Price */}
-            <div className="flex items-start justify-between mb-3 pr-8">
-              <div className="flex-1 pr-4">
-                <h3 className="text-lg font-bold text-text-primary mb-1 line-clamp-1">
-                  {auction.title}
-                </h3>
-                <p className="text-text-secondary text-xs line-clamp-2">
+          {/* Main Content Area */}
+          <div className="flex-1 flex flex-col min-w-0">
+            {/* Header Row */}
+            <div className="flex items-start justify-between gap-3 mb-3">
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-1">
+                  <h3 className="text-base font-semibold text-text-primary line-clamp-1">
+                    {auction.title}
+                  </h3>
+                  <span className={`px-2 py-0.5 text-xs font-medium rounded-md ${statusConfig.bgClass} ${statusConfig.textClass} flex-shrink-0`}>
+                    {statusConfig.label}
+                  </span>
+                </div>
+                <p className="text-xs text-text-secondary line-clamp-1">
                   {auction.description}
                 </p>
               </div>
-              <div className="text-right shrink-0">
-                <div className="text-xs text-text-secondary">Current Bid</div>
-                <div className="text-xl font-bold text-primary">
-                  ${auction.currentBid.toLocaleString()}
-                </div>
-              </div>
+              <button
+                onClick={() => setShowDeleteDialog(true)}
+                disabled={isProcessing}
+                className="p-1.5 hover:bg-error/10 text-text-secondary hover:text-error rounded-lg transition-all duration-250 disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
+                title="Delete auction"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+              </button>
             </div>
 
-            {/* Compact Info Grid */}
-            <div className="grid grid-cols-3 gap-3 py-3 border-y border-border text-xs">
+            {/* Stats Row */}
+            <div className="flex items-center gap-4 mb-3 text-xs">
               <div>
-                <div className="text-text-secondary mb-0.5">Category</div>
-                <div className="font-semibold text-text-primary capitalize">{auction.category}</div>
+                <span className="text-text-secondary">Current:</span>
+                <span className="ml-1.5 font-bold text-primary text-base">${auction.currentBid.toLocaleString()}</span>
               </div>
+              <div className="w-px h-4 bg-border" />
               <div>
-                <div className="text-text-secondary mb-0.5">Start Price</div>
-                <div className="font-semibold text-text-primary">${auction.startPrice.toLocaleString()}</div>
+                <span className="text-text-secondary">Bids:</span>
+                <span className="ml-1.5 font-semibold text-text-primary">{auction.bidsCount}</span>
               </div>
+              <div className="w-px h-4 bg-border" />
               <div>
-                <div className="text-text-secondary mb-0.5">Total Bids</div>
-                <div className="font-semibold text-text-primary">{auction.bidsCount}</div>
+                <span className="text-text-secondary capitalize">{auction.category}</span>
               </div>
-            </div>
-
-            {/* Dates - Compact Row */}
-            <div className="flex items-center gap-4 text-xs text-text-secondary mt-3 mb-3">
-              <div>
-                <span className="opacity-75">Created:</span>{" "}
-                <span className="font-medium">{new Date(auction.createdAt).toLocaleDateString()}</span>
-              </div>
-              <div className="w-px h-3 bg-border" />
-              <div>
-                <span className="opacity-75">Ends:</span>{" "}
-                <span className="font-medium">{new Date(auction.endsAt).toLocaleDateString()}</span>
-              </div>
-              {auction.status === "approved" ? (
+              {auction.status === "approved" && (
                 <>
-                  <div className="w-px h-3 bg-border" />
-                  <div>
-                    <span className="opacity-75">Time Left:</span>{" "}
-                    <span className="font-medium text-green-600">
-                      {getTimeRemaining(new Date(auction.endsAt))}
-                    </span>
+                  <div className="w-px h-4 bg-border" />
+                  <div className="flex items-center gap-1.5 text-success">
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span className="font-medium">{getTimeRemaining(new Date(auction.endsAt))}</span>
                   </div>
                 </>
-              ) : auction.reviewedAt ? (
-                <>
-                  <div className="w-px h-3 bg-border" />
-                  <div>
-                    <span className="opacity-75">Reviewed:</span>{" "}
-                    <span className="font-medium">{new Date(auction.reviewedAt).toLocaleDateString()}</span>
-                  </div>
-                </>
-              ) : null}
+              )}
             </div>
 
             {/* Error Messages */}
             {approveMutation.isError && (
-              <div className="bg-red-500/10 border border-red-500/20 rounded-md p-2.5 mb-3">
-                <p className="text-xs text-red-600">
+              <div className="mb-3 py-1.5 px-2.5 bg-error/10 border border-error/25 rounded-lg">
+                <p className="text-xs text-error">
                   {approveMutation.error?.message || "Failed to approve auction"}
                 </p>
               </div>
             )}
 
-            {/* Action Buttons - Compact */}
+            {/* Action Buttons Row */}
             <div className="flex gap-2 mt-auto">
               {auction.status === "pending" && (
                 <>
                   <button
                     onClick={handleApprove}
                     disabled={isProcessing}
-                    className="flex-1 px-3 py-2 bg-green-600 hover:bg-green-700 text-white text-xs font-semibold rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex-1 px-4 py-2 bg-success hover:bg-success/90 text-white text-sm font-medium rounded-lg transition-all duration-250 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {approveMutation.isPending ? "Approving..." : "✓ Approve"}
+                    {approveMutation.isPending ? "Approving..." : "Approve"}
                   </button>
                   <button
                     onClick={() => setShowRejectDialog(true)}
                     disabled={isProcessing}
-                    className="flex-1 px-3 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-semibold rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-4 py-2 bg-surface-hover hover:bg-border/30 border border-border text-text-primary text-sm font-medium rounded-lg transition-all duration-250 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    ✕ Reject
+                    Decline
                   </button>
                 </>
               )}
@@ -163,9 +159,9 @@ export const AdminAuctionCard = ({ auction }: AdminAuctionCardProps) => {
                 <button
                   onClick={() => setShowRejectDialog(true)}
                   disabled={isProcessing}
-                  className="w-full px-3 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-semibold rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 px-4 py-2 bg-surface-hover hover:bg-border/30 border border-border text-text-primary text-sm font-medium rounded-lg transition-all duration-250 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  ✕ Reject Auction
+                  Decline
                 </button>
               )}
 
@@ -173,9 +169,9 @@ export const AdminAuctionCard = ({ auction }: AdminAuctionCardProps) => {
                 <button
                   onClick={handleApprove}
                   disabled={isProcessing}
-                  className="w-full px-3 py-2 bg-green-600 hover:bg-green-700 text-white text-xs font-semibold rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 px-4 py-2 bg-success hover:bg-success/90 text-white text-sm font-medium rounded-lg transition-all duration-250 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {approveMutation.isPending ? "Approving..." : "✓ Approve Auction"}
+                  {approveMutation.isPending ? "Approving..." : "Approve"}
                 </button>
               )}
             </div>

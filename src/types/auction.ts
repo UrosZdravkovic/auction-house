@@ -52,7 +52,7 @@ export interface Auction {
   title: string;                        // Auction title/name
   description: string;                  // Detailed description of the item
   category: string;                     // Item category (matches Firebase structure)
-  imageUrl: string;                     // Main image URL
+  imageUrls: string[];                  // Array of image URLs (Firebase: imageUrls)
   
   // Pricing & Bidding (matching Firebase field names)
   startPrice: number;                   // Starting price (Firebase: startPrice)

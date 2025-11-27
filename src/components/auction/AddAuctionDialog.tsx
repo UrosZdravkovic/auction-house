@@ -46,7 +46,7 @@ const auctionSchema = z.object({
   description: z.string().min(10, "Description must be at least 10 characters").max(1000, "Description must be less than 1000 characters"),
   category: z.enum(categories, { message: "Please select a category" }),
   startPrice: z.string().min(1, "Starting price is required"),
-  imageUrl: z.string().min(1, "Image is required"),
+  imageUrls: z.array(z.string()).min(1, "At least one image is required").max(5, "Maximum 5 images allowed"),
   endsAt: z.string().min(1, "End date is required"),
 }).refine((data) => {
   const price = parseFloat(data.startPrice);
@@ -77,10 +77,13 @@ export const AddAuctionDialog = ({ open, onOpenChange }: AddAuctionDialogProps) 
     watch,
   } = useForm<AuctionFormData>({
     resolver: zodResolver(auctionSchema),
+    defaultValues: {
+      imageUrls: [],
+    },
   });
 
   const categoryValue = watch("category");
-  const imageUrlValue = watch("imageUrl");
+  const imageUrlsValue = watch("imageUrls") || [];
 
   const onSubmit = async (data: AuctionFormData) => {
     if (!user) return;
@@ -91,12 +94,12 @@ export const AddAuctionDialog = ({ open, onOpenChange }: AddAuctionDialogProps) 
         description: data.description,
         category: data.category,
         startPrice: parseFloat(data.startPrice),
-        imageUrl: data.imageUrl,
+        imageUrls: data.imageUrls,
         ownerId: user.uid,
         endsAt: new Date(data.endsAt),
       });
 
-      reset();
+      reset({ imageUrls: [] });
       onOpenChange(false);
     } catch (error) {
       console.error("Failed to create auction:", error);
@@ -191,9 +194,9 @@ export const AddAuctionDialog = ({ open, onOpenChange }: AddAuctionDialogProps) 
 
           {/* Image Picker */}
           <ImagePicker
-            value={imageUrlValue || ""}
-            onChange={(value) => setValue("imageUrl", value)}
-            error={errors.imageUrl?.message}
+            value={imageUrlsValue}
+            onChange={(value) => setValue("imageUrls", value)}
+            error={errors.imageUrls?.message}
           />
 
           {/* End Date */}
