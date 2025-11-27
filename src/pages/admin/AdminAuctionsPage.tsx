@@ -1,5 +1,6 @@
 import { AdminAuctionCard } from "../../components/admin/AdminAuctionCard";
-import { useAllAuctions } from "../../hooks/useAdminActions"
+import { useAllAuctions } from "../../hooks/useAdminActions";
+import { AdminAuctionCardSkeleton } from "../../components/admin/AdminAuctionCardSkeleton";
 
 
 export const AdminAuctionsPage = () => {
@@ -20,8 +21,10 @@ export const AdminAuctionsPage = () => {
       </div>
 
       {isLoading && (
-        <div className="text-center py-12">
-          <p className="text-text-secondary">Loading all auctions...</p>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 p-1">
+          {Array.from({ length: 4 }).map((_, index) => (
+            <AdminAuctionCardSkeleton key={index} />
+          ))}
         </div>
       )}
       

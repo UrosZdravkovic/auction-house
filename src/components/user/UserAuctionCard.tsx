@@ -7,6 +7,7 @@ import type { Auction } from "../../types";
 
 interface UserAuctionCardProps {
   auction: Auction;
+
 }
 
 export const UserAuctionCard = ({ auction }: UserAuctionCardProps) => {

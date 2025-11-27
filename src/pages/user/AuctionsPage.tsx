@@ -1,5 +1,6 @@
 import { useAuctions } from "../../hooks/useAuctions";
 import { UserAuctionCard } from "../../components/user/UserAuctionCard";
+import { UserAuctionCardSkeleton } from "../../components/user/UserAuctionCardSkeleton";
 
 export default function AuctionsPage() {
   const { data: auctions = [], isLoading, error } = useAuctions();
@@ -9,8 +10,10 @@ export default function AuctionsPage() {
       <h1 className="text-3xl font-bold mb-6">Active Auctions</h1>
       
       {isLoading && (
-        <div className="text-center py-12">
-          <p className="text-text-secondary">Loading auctions...</p>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 p-1">
+          {Array.from({ length: 4 }).map((_, index) => (
+            <UserAuctionCardSkeleton key={index} />
+          ))}
         </div>
       )}
 
@@ -32,7 +35,7 @@ export default function AuctionsPage() {
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 p-1">
             {auctions.map((auction) => (
-              <UserAuctionCard key={auction.id} auction={auction} />
+              <UserAuctionCard  key={auction.id} auction={auction} />
             ))}
           </div>
         </div>

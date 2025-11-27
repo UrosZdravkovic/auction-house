@@ -5,9 +5,11 @@ import { DeleteAuctionDialog } from "./DeleteAuctionDialog";
 import { getThumbnailUrl } from "../../services/storageService";
 import { getTimeRemaining } from "../../utils/timeUtils";
 import type { Auction } from "../../types";
+import { Spinner } from "../ui/spinner";
 
 interface AdminAuctionCardProps {
   auction: Auction;
+
 }
 
 export const AdminAuctionCard = ({ auction }: AdminAuctionCardProps) => {
@@ -62,7 +64,7 @@ export const AdminAuctionCard = ({ auction }: AdminAuctionCardProps) => {
             <img
               src={getThumbnailUrl((auction.imageUrls?.[0] || (auction as any).imageUrl) || "", 300, 300)}
               alt={auction.title}
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              className="w-full h-full object-cover"
             />
             {/* Status Indicator - Small Corner Badge */}
             <div className={`absolute top-2 left-2 w-2.5 h-2.5 rounded-full ${statusConfig.bgClass} border-2 border-surface shadow-sm`} />
