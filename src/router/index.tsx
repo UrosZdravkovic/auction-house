@@ -7,6 +7,7 @@ import { ProfilePage } from '../pages/user/ProfilePage';
 import { AuthenticationPage } from '../pages/authentication/AuthenticationPage';
 import { AdminDashboardPage } from '../pages/admin/AdminDashboardPage';
 import { AdminAuctionsPage } from '../pages/admin/AdminAuctionsPage';
+import { AdminAuctionDetailsPage } from '../pages/admin/AdminAuctionDetailsPage';
 
 export const createUserRouter = () =>
   createBrowserRouter([
@@ -52,6 +53,10 @@ export const createAdminRouter = () =>
         {
           path: 'auctions',
           element: <AdminAuctionsPage />,
+        },
+        {
+          path: 'auctions/:id',
+          element: <AdminAuctionDetailsPage />,
         },
         {
           path: 'profile',

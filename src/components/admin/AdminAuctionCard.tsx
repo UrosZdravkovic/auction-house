@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { useApproveAuction } from "../../hooks/useAdminActions";
 import { RejectAuctionDialog } from "./RejectAuctionDialog";
 import { DeleteAuctionDialog } from "./DeleteAuctionDialog";
@@ -60,7 +61,7 @@ export const AdminAuctionCard = ({ auction }: AdminAuctionCardProps) => {
       <div className="group bg-surface border border-border rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 hover:border-primary/30">
         <div className="flex gap-4 p-4">
           {/* Compact Image - Left Side */}
-          <div className="relative w-28 h-28 shrink-0 bg-surface-hover rounded-lg overflow-hidden">
+          <Link to={`/auctions/${auction.id}`} className="relative w-28 h-28 shrink-0 bg-surface-hover rounded-lg overflow-hidden">
             <img
               src={getThumbnailUrl((auction.imageUrls?.[0] || (auction as any).imageUrl) || "", 300, 300)}
               alt={auction.title}
@@ -68,15 +69,15 @@ export const AdminAuctionCard = ({ auction }: AdminAuctionCardProps) => {
             />
             {/* Status Indicator - Small Corner Badge */}
             <div className={`absolute top-2 left-2 w-2.5 h-2.5 rounded-full ${statusConfig.bgClass} border-2 border-surface shadow-sm`} />
-          </div>
+          </Link>
 
           {/* Main Content Area */}
           <div className="flex-1 flex flex-col min-w-0">
             {/* Header Row */}
             <div className="flex items-start justify-between gap-3 mb-3">
-              <div className="flex-1 min-w-0">
+              <Link to={`/auctions/${auction.id}`} className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
-                  <h3 className="text-base font-semibold text-text-primary line-clamp-1">
+                  <h3 className="text-base font-semibold text-text-primary line-clamp-1 hover:text-primary transition-colors">
                     {auction.title}
                   </h3>
                   <span className={`px-2 py-0.5 text-xs font-medium rounded-md ${statusConfig.bgClass} ${statusConfig.textClass} flex-shrink-0`}>
@@ -86,7 +87,7 @@ export const AdminAuctionCard = ({ auction }: AdminAuctionCardProps) => {
                 <p className="text-xs text-text-secondary line-clamp-1">
                   {auction.description}
                 </p>
-              </div>
+              </Link>
               <button
                 onClick={() => setShowDeleteDialog(true)}
                 disabled={isProcessing}
