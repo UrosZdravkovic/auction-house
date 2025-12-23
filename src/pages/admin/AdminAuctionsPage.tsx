@@ -7,7 +7,7 @@ export const AdminAuctionsPage = () => {
 
   const { data: auctions, isLoading, isError } = useAllAuctions();
 
-
+  
 
   return (
     <div className="container mx-auto px-6 py-8">
