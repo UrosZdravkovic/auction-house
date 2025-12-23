@@ -7,40 +7,61 @@ export const AdminAuctionDetailsPage = () => {
     const { id } = useParams<{ id: string }>();
     const { data: auction, isLoading, error } = useAuction(id!);
 
+    if (isLoading) {
+        return (
+            <div className="flex items-center justify-center min-h-[400px]">
+                <p className="text-text-secondary">Loading auction...</p>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="flex items-center justify-center min-h-[400px]">
+                <p className="text-error">Error: {error.message}</p>
+            </div>
+        );
+    }
+
+    if (!auction) {
+        return (
+            <div className="flex items-center justify-center min-h-[400px]">
+                <p className="text-text-secondary">Auction not found</p>
+            </div>
+        );
+    }
+
     return (
-        <div className="min-h-screen bg-background p-8">
-            {isLoading && <p>Loading...</p>}
-            {error && <p className="text-error">Error: {error.message}</p>}
-            {auction && (
-                <>
-                    <div className="flex gap-8 mb-6">
-                        <div className="w-1/2">
-                            <ImageSlider images={auction.imageUrls} />
-                        </div>
+        <div className="grid grid-cols-2 gap-6 p-8">
+            <div className="bg-surface rounded-xl border border-border overflow-hidden self-start">
+                <ImageSlider images={auction.imageUrls} />
+            </div>
 
-                        <div className="flex-1 space-y-6">
-                            <div>
-                                <h1 className="text-2xl font-bold text-text-primary mb-4">{auction.title}</h1>
-                                <p className="text-text-secondary">{auction.description}</p>
-                            </div>
+            <div className="space-y-4">
+                <div className="bg-surface rounded-xl border border-border p-6">
+                    <h1 className="text-xl font-bold text-text-primary">{auction.title}</h1>
+                    <p className="text-text-secondary mt-2">{auction.description}</p>
+                </div>
 
-                            <div className="bg-surface rounded-lg p-4 border border-border">
-                                <div className="mb-2">
-                                    <p className="text-sm text-text-secondary">Current Bid</p>
-                                    <p className="text-2xl font-bold text-primary">
-                                        ${auction.currentBid.toLocaleString()}
-                                    </p>
-                                </div>
-                                <p className="text-xs text-text-secondary">
-                                    Total Bids: {auction.bidsCount}
-                                </p>
-                            </div>
-
-                            <BidHistory />
-                        </div>
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="bg-surface rounded-xl border border-border p-4">
+                        <p className="text-xs text-text-secondary uppercase tracking-wide">Current Bid</p>
+                        <p className="text-2xl font-bold text-primary mt-1">
+                            ${auction.currentBid.toLocaleString()}
+                        </p>
                     </div>
-                </>
-            )}
+                    <div className="bg-surface rounded-xl border border-border p-4">
+                        <p className="text-xs text-text-secondary uppercase tracking-wide">Total Bids</p>
+                        <p className="text-2xl font-bold text-text-primary mt-1">
+                            {auction.bidsCount}
+                        </p>
+                    </div>
+                </div>
+
+                <div className="bg-surface rounded-xl border border-border p-6">
+                    <BidHistory auctionId={id!} />
+                </div>
+            </div>
         </div>
     );
-}
+};

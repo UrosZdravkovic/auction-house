@@ -2,12 +2,16 @@ import { useState } from 'react';
 import { useBids } from '@/hooks/useBids';
 import { Timestamp } from 'firebase/firestore';
 import type { Bid } from '@/types';
-import { useParams } from 'react-router-dom';
 
-export const BidHistory = () => {
-    const { id } = useParams<{ id: string }>();
 
-    const { data: allBids = [], isLoading, isError, error } = useBids(id!);
+type BidHistoryProps = {
+    auctionId: string;
+};
+
+export const BidHistory = ({ auctionId }: BidHistoryProps) => {
+
+
+    const { data: allBids = [], isLoading, isError, error } = useBids(auctionId);
     const [showAll, setShowAll] = useState(false);
 
     const displayedBids = showAll ? allBids : allBids.slice(0, 5);
@@ -57,7 +61,7 @@ export const BidHistory = () => {
             {hasMore && !showAll && (
                 <button
                     onClick={() => setShowAll(true)}
-                    className="w-full px-4 py-2 bg-primary hover:bg-primary/90 text-white text-sm font-medium rounded-lg transition-all duration-250"
+                    className="w-full px-4 py-2 bg-surface-hover hover:bg-primary/90 text-white text-sm font-medium rounded-lg transition-all duration-250"
                 >
                     Show More ({allBids.length - 5} more bids)
                 </button>

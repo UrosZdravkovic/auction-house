@@ -16,7 +16,7 @@ export type AuctionApprovalStatus = 'pending' | 'approved' | 'rejected' | 'compl
  * - ended: Auction time has expired
  * - cancelled: Cancelled by admin or creator
  */
-export type AuctionLifecycleStatus = 'draft' | 'active' | 'ended' | 'cancelled';
+//export type AuctionLifecycleStatus = 'draft' | 'active' | 'ended' | 'cancelled';
 
 /**
  * Categories for organizing auctions

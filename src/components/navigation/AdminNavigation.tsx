@@ -69,7 +69,7 @@ export const AdminNavigation = () => {
           <div className="flex items-center gap-3">
             <button
               onClick={() => setShowAddDialog(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium text-white bg-primary hover:bg-primary/90 transition-all duration-200"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium text-white bg-primary hover:bg-primary transition-all duration-200"
             >
               <HiPlus className="w-4 h-4" />
               <span>Create Auction</span>
