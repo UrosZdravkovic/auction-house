@@ -7,12 +7,13 @@ const CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
  * @param userId - The user's ID (for organizing uploads in folders)
  * @returns The secure URL of the uploaded image
  */
+// In storageService.ts
 export const uploadImage = async (file: File, userId: string): Promise<string> => {
   try {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
-    formData.append('folder', `auctions/${userId}`); // Organize by user
+    formData.append('folder', `auctions/${userId}`);
     
     const response = await fetch(
       `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
@@ -29,8 +30,13 @@ export const uploadImage = async (file: File, userId: string): Promise<string> =
 
     const data = await response.json();
     
-    // Return the secure URL
-    return data.secure_url;
+    // Return optimized URL with 800x600 transformation
+    const optimizedUrl = data.secure_url.replace(
+      '/upload/',
+      '/upload/w_800,h_600,c_fill,q_auto,f_auto/'
+    );
+    
+    return optimizedUrl;
   } catch (error) {
     console.error('Error uploading to Cloudinary:', error);
     throw new Error('Failed to upload image. Please try again.');

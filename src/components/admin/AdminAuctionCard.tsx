@@ -74,9 +74,9 @@ export const AdminAuctionCard = ({ auction }: AdminAuctionCardProps) => {
       <div className="group bg-surface border border-border rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 hover:border-primary/30">
         <div className="flex gap-4 p-4">
           {/* Compact Image - Left Side */}
-          <Link to={`/auctions/${auction.id}`} className="relative w-28 h-28 shrink-0 bg-surface-hover rounded-lg overflow-hidden">
+          <Link to={`/auctions/${auction.id}`} className="relative w-48 h-48 shrink-0 bg-surface-hover rounded-lg overflow-hidden">
             <img
-              src={getThumbnailUrl((auction.imageUrls?.[0] || (auction as any).imageUrl) || "", 300, 300)}
+              src={getThumbnailUrl((auction.imageUrls?.[0] || (auction as any).imageUrl) || "", 480, 480)}
               alt={auction.title}
               className="w-full h-full object-cover"
             />
