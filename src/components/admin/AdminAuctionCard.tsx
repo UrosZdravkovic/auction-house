@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { FiTrash2, FiClock } from "react-icons/fi";
 import { useApproveAuction } from "../../hooks/useAdminActions";
 import { RejectAuctionDialog } from "./RejectAuctionDialog";
 import { DeleteAuctionDialog } from "./DeleteAuctionDialog";
@@ -18,15 +19,14 @@ export const AdminAuctionCard = ({ auction }: AdminAuctionCardProps) => {
 
   const approveMutation = useApproveAuction();
   const isProcessing = approveMutation.isPending;
-
   const isExpired = new Date() > new Date(auction.endsAt);
 
   const handleCardClick = () => {
-    navigate(`/auctions/${auction.id}`);
+    navigate(`/admin/auctions/${auction.id}`);
   };
 
   const handleApprove = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent card navigation
+    e.stopPropagation();
     approveMutation.mutate(auction.id);
   };
 
@@ -83,21 +83,32 @@ export const AdminAuctionCard = ({ auction }: AdminAuctionCardProps) => {
                 className="p-1.5 hover:bg-error/10 text-text-secondary hover:text-error rounded-lg transition-all duration-250 disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
                 title="Delete auction"
               >
-                <TrashIcon />
+                <FiTrash2 className="w-4 h-4" />
               </button>
             </div>
 
             {/* Stats */}
             <div className="flex items-center gap-4 mb-3 text-xs">
-              <Stat label="Current" value={`$${auction.currentBid.toLocaleString()}`} highlight />
-              <Divider />
-              <Stat label="Bids" value={auction.bidsCount} />
-              <Divider />
+              <div>
+                <span className="text-text-secondary">Current:</span>
+                <span className="ml-1.5 font-bold text-primary text-base">
+                  ${auction.currentBid.toLocaleString()}
+                </span>
+              </div>
+              <div className="w-px h-4 bg-border" />
+              <div>
+                <span className="text-text-secondary">Bids:</span>
+                <span className="ml-1.5 font-semibold text-text-primary">{auction.bidsCount}</span>
+              </div>
+              <div className="w-px h-4 bg-border" />
               <span className="text-text-secondary capitalize">{auction.category}</span>
               {auction.status === "approved" && !isExpired && (
                 <>
-                  <Divider />
-                  <TimeRemaining endsAt={auction.endsAt} />
+                  <div className="w-px h-4 bg-border" />
+                  <div className="flex items-center gap-1.5 text-success">
+                    <FiClock className="w-3.5 h-3.5" />
+                    <span className="font-medium">{getTimeRemaining(new Date(auction.endsAt))}</span>
+                  </div>
                 </>
               )}
             </div>
@@ -115,19 +126,31 @@ export const AdminAuctionCard = ({ auction }: AdminAuctionCardProps) => {
             <div className="flex gap-2 mt-auto">
               {auction.status === "pending" && (
                 <>
-                  <ActionButton onClick={handleApprove} disabled={isProcessing} variant="success">
+                  <button
+                    onClick={handleApprove}
+                    disabled={isProcessing}
+                    className="flex-1 px-4 py-2 bg-success hover:bg-success/90 text-white text-sm font-medium rounded-lg transition-all duration-250 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
                     {approveMutation.isPending ? "Approving..." : "Approve"}
-                  </ActionButton>
-                  <ActionButton onClick={handleReject} disabled={isProcessing} variant="secondary">
+                  </button>
+                  <button
+                    onClick={handleReject}
+                    disabled={isProcessing}
+                    className="px-4 py-2 bg-surface-hover hover:bg-border/30 border border-border text-text-primary text-sm font-medium rounded-lg transition-all duration-250 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
                     Decline
-                  </ActionButton>
+                  </button>
                 </>
               )}
 
               {auction.status === "rejected" && (
-                <ActionButton onClick={handleApprove} disabled={isProcessing} variant="success">
+                <button
+                  onClick={handleApprove}
+                  disabled={isProcessing}
+                  className="flex-1 px-4 py-2 bg-success hover:bg-success/90 text-white text-sm font-medium rounded-lg transition-all duration-250 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
                   {approveMutation.isPending ? "Approving..." : "Approve"}
-                </ActionButton>
+                </button>
               )}
             </div>
           </div>
@@ -151,62 +174,6 @@ export const AdminAuctionCard = ({ auction }: AdminAuctionCardProps) => {
   );
 };
 
-// Helper components
-const Divider = () => <div className="w-px h-4 bg-border" />;
-
-const Stat = ({ label, value, highlight }: { label: string; value: string | number; highlight?: boolean }) => (
-  <div>
-    <span className="text-text-secondary">{label}:</span>
-    <span className={`ml-1.5 font-semibold ${highlight ? "text-primary text-base font-bold" : "text-text-primary"}`}>
-      {value}
-    </span>
-  </div>
-);
-
-const TimeRemaining = ({ endsAt }: { endsAt: Date }) => (
-  <div className="flex items-center gap-1.5 text-success">
-    <ClockIcon />
-    <span className="font-medium">{getTimeRemaining(new Date(endsAt))}</span>
-  </div>
-);
-
-const TrashIcon = () => (
-  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-  </svg>
-);
-
-const ClockIcon = () => (
-  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-  </svg>
-);
-
-interface ActionButtonProps {
-  onClick: (e: React.MouseEvent) => void;
-  disabled: boolean;
-  variant: "success" | "secondary";
-  children: React.ReactNode;
-}
-
-const ActionButton = ({ onClick, disabled, variant, children }: ActionButtonProps) => {
-  const styles = {
-    success: "bg-success hover:bg-success/90 text-white",
-    secondary: "bg-surface-hover hover:bg-border/30 border border-border text-text-primary",
-  };
-
-  return (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      className={`flex-1 px-4 py-2 text-sm font-medium rounded-lg transition-all duration-250 disabled:opacity-50 disabled:cursor-not-allowed ${styles[variant]}`}
-    >
-      {children}
-    </button>
-  );
-};
-
-// Extract status logic
 const getStatusConfig = (status: string, isExpired: boolean) => {
   if (status === "approved" && isExpired) {
     return { bgClass: "bg-info/15", textClass: "text-info", label: "Completed" };
