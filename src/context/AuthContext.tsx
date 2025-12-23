@@ -1,13 +1,12 @@
 import { createContext, useEffect, useState, type ReactNode } from "react";
-import { 
-  getAuth, 
-  onAuthStateChanged, 
-  signInWithEmailAndPassword, 
-  createUserWithEmailAndPassword, 
-  signOut, 
-  type User 
+import {
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
+  type User,
 } from "firebase/auth";
-import { db } from "../firebase/firebase";
+import { auth, db } from "../firebase/firebase";
 import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
 import type { UserRole } from "../types";
 
@@ -33,7 +32,7 @@ export const AuthContext = createContext<AuthContextType | null>(null);
 
 // Provider komponenta
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const auth = getAuth();
+  // use the shared `auth` instance exported from src/firebase/firebase.ts
   const [user, setUser] = useState<User | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
@@ -45,13 +44,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       
       // Učitaj korisnikov profil iz Firestore
       if (firebaseUser) {
+        // Helpful debug: ensure the UID used to fetch the document
+        console.debug("Auth user uid:", firebaseUser.uid);
         try {
           const userDoc = await getDoc(doc(db, "users", firebaseUser.uid));
           if (userDoc.exists()) {
             setUserProfile(userDoc.data() as UserProfile);
           }
-        } catch (error) {
-          console.error("Error fetching user profile:", error);
+        } catch (error: any) {
+          console.error(
+            "Error fetching user profile:",
+            error?.code || error?.name,
+            error?.message || error
+          );
           setUserProfile(null);
         }
       } else {

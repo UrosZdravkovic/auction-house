@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { fetchAuctions, fetchAuctionById, createAuction, updateAuctionBid, fetchUsersAuction, deleteAuction } from "../services/auctionService";
+import { fetchAuctions, fetchActiveAuctions, fetchAuctionById, createAuction, updateAuctionBid, fetchUsersAuction, deleteAuction } from "../services/auctionService";
 import type { Auction } from "../types";
 
 /**
@@ -11,6 +11,13 @@ export const useAuctions = () => {
     queryFn: fetchAuctions,
   });
 };
+
+export const useActiveAuctions = () => {
+  return useQuery({
+    queryKey: ['auctions', 'active'],
+    queryFn: fetchActiveAuctions,
+  });
+}
 
 /**
  * Hook to fetch a single auction by ID

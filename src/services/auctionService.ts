@@ -25,6 +25,15 @@ export const fetchAuctions = async (): Promise<Auction[]> => {
   return snapshot.docs.map(doc => convertFirestoreToAuction(doc.id, doc.data()));
 };
 
+export const fetchActiveAuctions = async (): Promise<Auction[]> => {
+  const q = query(collection(db, 'auctions'), where('status', '==', 'approved'));
+  const snapshot = await getDocs(q);
+  const now = new Date();
+  return snapshot.docs
+    .map(doc => convertFirestoreToAuction(doc.id, doc.data()))
+    .filter(auction => new Date(auction.endsAt) > now);
+};
+
 
 
 export const fetchUsersAuction = async (userId: string) : Promise<Auction[]> => {

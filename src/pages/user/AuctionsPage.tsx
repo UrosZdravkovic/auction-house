@@ -1,9 +1,9 @@
-import { useAuctions } from "../../hooks/useAuctions";
+import { useActiveAuctions } from "../../hooks/useAuctions";
 import { UserAuctionCard } from "../../components/user/UserAuctionCard";
 import { UserAuctionCardSkeleton } from "../../components/user/UserAuctionCardSkeleton";
 
 export default function AuctionsPage() {
-  const { data: auctions = [], isLoading, error } = useAuctions();
+  const { data: auctions = [], isLoading, error } = useActiveAuctions();
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">

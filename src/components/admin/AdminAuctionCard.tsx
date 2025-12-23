@@ -6,7 +6,7 @@ import { DeleteAuctionDialog } from "./DeleteAuctionDialog";
 import { getThumbnailUrl } from "../../services/storageService";
 import { getTimeRemaining } from "../../utils/timeUtils";
 import type { Auction } from "../../types";
-import { Spinner } from "../ui/spinner";
+
 
 interface AdminAuctionCardProps {
   auction: Auction;
@@ -19,6 +19,10 @@ export const AdminAuctionCard = ({ auction }: AdminAuctionCardProps) => {
 
   const approveMutation = useApproveAuction();
 
+  const isAuctionExpired = (endsAt: Date) => {
+    return new Date() > new Date(endsAt);
+  }
+
   const handleApprove = () => {
     approveMutation.mutate(auction.id);
   };
@@ -26,30 +30,39 @@ export const AdminAuctionCard = ({ auction }: AdminAuctionCardProps) => {
   const isProcessing = approveMutation.isPending;
 
   const getStatusConfig = () => {
+    // Check if approved auction has expired
+    if (auction.status === "approved" && isAuctionExpired(auction.endsAt)) {
+      return {
+        bgClass: "bg-info/15",
+        textClass: "text-info",
+        label: "Completed"
+      };
+    }
+
     switch (auction.status) {
       case "pending":
-        return { 
-          bgClass: "bg-warning/15", 
-          textClass: "text-warning", 
-          label: "Awaiting Review" 
+        return {
+          bgClass: "bg-warning/15",
+          textClass: "text-warning",
+          label: "Awaiting Review"
         };
       case "approved":
-        return { 
-          bgClass: "bg-success/15", 
-          textClass: "text-success", 
-          label: "Active" 
+        return {
+          bgClass: "bg-success/15",
+          textClass: "text-success",
+          label: "Active"
         };
       case "rejected":
-        return { 
-          bgClass: "bg-error/15", 
-          textClass: "text-error", 
-          label: "Declined" 
+        return {
+          bgClass: "bg-error/15",
+          textClass: "text-error",
+          label: "Declined"
         };
       default:
-        return { 
-          bgClass: "bg-surface-hover", 
-          textClass: "text-text-secondary", 
-          label: auction.status 
+        return {
+          bgClass: "bg-surface-hover",
+          textClass: "text-text-secondary",
+          label: auction.status
         };
     }
   };
@@ -158,14 +171,16 @@ export const AdminAuctionCard = ({ auction }: AdminAuctionCardProps) => {
                 </>
               )}
 
-              {auction.status === "approved" && (
-                <button
-                  onClick={() => setShowRejectDialog(true)}
-                  disabled={isProcessing}
-                  className="flex-1 px-4 py-2 bg-surface-hover hover:bg-border/30 border border-border text-text-primary text-sm font-medium rounded-lg transition-all duration-250 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  Decline
-                </button>
+              {auction.status === "approved" && !isAuctionExpired(auction.endsAt) && (
+                <>
+                  <div className="w-px h-4 bg-border" />
+                  <div className="flex items-center gap-1.5 text-success">
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span className="font-medium">{getTimeRemaining(new Date(auction.endsAt))}</span>
+                  </div>
+                </>
               )}
 
               {auction.status === "rejected" && (

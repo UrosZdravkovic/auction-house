@@ -5,8 +5,9 @@ import { Timestamp } from 'firebase/firestore';
  * - pending: Awaiting admin review
  * - approved: Admin approved, auction can go live
  * - rejected: Admin rejected, auction won't be shown
+ * - completed: Auction has ended and all bids have been processed
  */
-export type AuctionApprovalStatus = 'pending' | 'approved' | 'rejected';
+export type AuctionApprovalStatus = 'pending' | 'approved' | 'rejected' | 'completed';
 
 /**
  * Lifecycle status of an auction
