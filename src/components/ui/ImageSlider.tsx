@@ -15,14 +15,7 @@ export default function ImageSlider({ images }: ImageSliderProps) {
 
   return (
     <div className="relative bg-surface rounded-xl overflow-hidden shadow-lg group">
-      <style>{`
-        .mySwiper .swiper-pagination-bullet {
-          background-color: rgba(255, 255, 255, 0.5);
-        }
-        .mySwiper .swiper-pagination-bullet-active {
-          background-color: #3b82f6;
-        }
-      `}</style>
+  
       
       <Swiper
         onSwiper={setMainSwiper}

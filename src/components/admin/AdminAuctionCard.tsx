@@ -46,15 +46,15 @@ export const AdminAuctionCard = ({ auction }: AdminAuctionCardProps) => {
     <>
       <div
         onClick={handleCardClick}
-        className="group bg-surface border border-border rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 hover:border-primary/30 cursor-pointer"
-      >
+        className="group bg-surface border border-border rounded-xl overflow-hidden shover:shadow-lg transition-all duration-300 hover:border-primary/30 cursor-pointer"
+>
         <div className="flex gap-4 p-4">
           {/* Image */}
           <div className="relative w-48 h-48 shrink-0 bg-surface-hover rounded-lg overflow-hidden">
             <img
               src={getThumbnailUrl(auction.imageUrls?.[0] || "", 480, 480)}
               alt={auction.title}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              className="w-full h-full object-cover"
             />
             <div className={`absolute top-2 left-2 w-2.5 h-2.5 rounded-full ${statusConfig.bgClass} border-2 border-surface shadow-sm`} />
           </div>
