@@ -22,9 +22,9 @@ export const useActiveAuctions = () => {
 
 export const useSameCategoryAuctions = (category: string, excludeAuctionId: string) => {
   return useQuery({
-    queryKey: ['auctions', 'category', category],
+    queryKey: ['auctions', 'category', category, excludeAuctionId],
     queryFn: () => fetchSameCategoryAuctions(category, excludeAuctionId),
-    enabled: !!category,
+    enabled: !!category && !!excludeAuctionId,
   });
 }
 

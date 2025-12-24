@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useSameCategoryAuctions } from "@/hooks/useAuctions";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
@@ -19,8 +20,13 @@ type Auction = {
 };
 
 function AuctionCard({ auction }: { auction: Auction }) {
+  const navigate = useNavigate();
+
   return (
-    <div className="bg-background rounded-lg border border-border overflow-hidden hover:border-primary transition-colors">
+    <div 
+      onClick={() => navigate(`/auctions/${auction.id}`)}
+      className="bg-background rounded-lg border border-border overflow-hidden hover:border-primary transition-colors cursor-pointer"
+    >
       {auction.imageUrls?.[0] && (
         <img
           src={auction.imageUrls[0]}
