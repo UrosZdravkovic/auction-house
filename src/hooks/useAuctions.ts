@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { fetchAuctions, fetchActiveAuctions, fetchAuctionById, createAuction, updateAuctionBid, fetchUsersAuction, deleteAuction } from "../services/auctionService";
+import { fetchAuctions, fetchActiveAuctions, fetchSameCategoryAuctions, fetchAuctionById, createAuction, updateAuctionBid, fetchUsersAuction, deleteAuction } from "../services/auctionService";
 import type { Auction } from "../types";
+
 
 /**
  * Hook to fetch all approved auctions (public view)
@@ -16,6 +17,14 @@ export const useActiveAuctions = () => {
   return useQuery({
     queryKey: ['auctions', 'active'],
     queryFn: fetchActiveAuctions,
+  });
+} 
+
+export const useSameCategoryAuctions = (category: string, excludeAuctionId: string) => {
+  return useQuery({
+    queryKey: ['auctions', 'category', category],
+    queryFn: () => fetchSameCategoryAuctions(category, excludeAuctionId),
+    enabled: !!category,
   });
 }
 

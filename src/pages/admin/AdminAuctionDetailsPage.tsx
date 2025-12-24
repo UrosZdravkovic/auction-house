@@ -1,11 +1,12 @@
 import { useParams } from "react-router-dom";
-import { useAuction } from "@/hooks/useAuctions";
+import { useAuction, useSameCategoryAuctions } from "@/hooks/useAuctions";
 import ImageSlider from "@/components/ui/ImageSlider";
 import { BidHistory } from '../../components/auction/BidsHistory';
 
 export const AdminAuctionDetailsPage = () => {
     const { id } = useParams<{ id: string }>();
     const { data: auction, isLoading, error } = useAuction(id!);
+    const { data: similarAuctions } = useSameCategoryAuctions(auction?.category || '', auction?.id || '');
 
     if (isLoading) {
         return (
@@ -60,6 +61,24 @@ export const AdminAuctionDetailsPage = () => {
 
                 <div className="bg-surface rounded-xl border border-border p-6">
                     <BidHistory auctionId={id!} />
+                </div>
+
+
+                {/* Similar Auctions Section */}
+                <div className="bg-surface rounded-xl border border-border p-6">
+                    <h2 className="text-lg font-semibold text-text-primary mb-4">Similar Auctions</h2>
+                    {similarAuctions && similarAuctions.length > 0 ? (
+                        <ul className="space-y-3">
+                            {similarAuctions.map(similar => (
+                                <li key={similar.id} className="border-b border-border pb-2">
+                                    <h3 className="text-sm font-medium text-text-primary">{similar.title}</h3>
+                                    <p className="text-xs text-text-secondary">Current Bid: ${similar.currentBid.toLocaleString()}</p>
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p className="text-text-secondary">No similar auctions found.</p>
+                    )}
                 </div>
             </div>
         </div>

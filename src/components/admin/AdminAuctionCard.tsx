@@ -8,7 +8,7 @@ import { getThumbnailUrl } from "../../services/storageService";
 import { getTimeRemaining } from "../../utils/timeUtils";
 import type { Auction } from "../../types";
 
-interface AdminAuctionCardProps {
+type AdminAuctionCardProps = {
   auction: Auction;
 }
 
@@ -22,7 +22,7 @@ export const AdminAuctionCard = ({ auction }: AdminAuctionCardProps) => {
   const isExpired = new Date() > new Date(auction.endsAt);
 
   const handleCardClick = () => {
-    navigate(`/admin/auctions/${auction.id}`);
+    navigate(`/auctions/${auction.id}`);
   };
 
   const handleApprove = (e: React.MouseEvent) => {

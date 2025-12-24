@@ -32,8 +32,16 @@ export const fetchActiveAuctions = async (): Promise<Auction[]> => {
   return snapshot.docs
     .map(doc => convertFirestoreToAuction(doc.id, doc.data()))
     .filter(auction => new Date(auction.endsAt) > now);
-};
+}; 
 
+
+export const fetchSameCategoryAuctions = async (category: string, excludeAuctionId: string): Promise<Auction[]> => {
+  const q = query(collection(db, 'auctions'), where('status', '==', 'approved'), where('category', '==', category));
+  const snapshot = await getDocs(q);
+  return snapshot.docs
+    .map(doc => convertFirestoreToAuction(doc.id, doc.data()))
+    .filter(auction => auction.id !== excludeAuctionId);
+}
 
 
 export const fetchUsersAuction = async (userId: string) : Promise<Auction[]> => {
