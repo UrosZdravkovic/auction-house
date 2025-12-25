@@ -30,6 +30,8 @@ export const SORT_OPTIONS: { value: SortOption; label: string }[] = [
   { value: 'most-bids', label: 'Most Bids' },
 ];
 
+
+
 /**
  * Default filter state
  * Used when resetting filters or initializing component state
@@ -45,8 +47,8 @@ export const DEFAULT_FILTERS = {
  * ITEMS_PER_PAGE: How many auctions to show at once
  * LOAD_MORE_INCREMENT: How many more to load when "Load More" is clicked
  */
-export const ITEMS_PER_PAGE = 12;
-export const LOAD_MORE_INCREMENT = 6;
+export const ITEMS_PER_PAGE = 6;
+
 
 /**
  * Time thresholds for display urgency
