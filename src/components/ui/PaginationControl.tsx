@@ -22,6 +22,8 @@ export function PaginationControl({
   onPageChange,
   isDisabled = false,
 }: PaginationControlProps) {
+
+
   const getPageNumbers = () => {
     const pages: (number | "ellipsis")[] = [];
 

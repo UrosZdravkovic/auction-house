@@ -1,37 +1,22 @@
 // pages/admin/AdminAuctionsPage.tsx
-import { useState } from "react";
 import { AdminAuctionCard } from "../../components/admin/AdminAuctionCard";
 import { useAllAuctions } from "../../hooks/useAdminActions";
 import { AdminAuctionCardSkeleton } from "../../components/admin/AdminAuctionCardSkeleton";
 import { PaginationControl } from "@/components/ui/PaginationControl";
+import { usePagination } from "../../hooks/usePagination";
 import { ITEMS_PER_PAGE } from "../../constants/auctionConstants";
 
 export const AdminAuctionsPage = () => {
   const { data: auctions, isLoading, isError } = useAllAuctions();
-  const [currentPage, setCurrentPage] = useState(1);
-  const [displayPage, setDisplayPage] = useState(1);
-  const [isTransitioning, setIsTransitioning] = useState(false);
-
-  const totalItems = auctions?.length ?? 0;
-  const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
-
-  const paginatedAuctions = auctions?.slice(
-    (displayPage - 1) * ITEMS_PER_PAGE,
-    displayPage * ITEMS_PER_PAGE
-  );
-
-  const goToPage = (page: number) => {
-    if (page === currentPage || isTransitioning) return;
-    if (page < 1 || page > totalPages) return;
-
-    setIsTransitioning(true);
-    setCurrentPage(page);
-
-    setTimeout(() => {
-      setDisplayPage(page);
-      setIsTransitioning(false);
-    }, 150);
-  };
+  
+  const {
+    currentPage,
+    totalPages,
+    totalItems,
+    paginatedItems: paginatedAuctions,
+    isTransitioning,
+    goToPage,
+  } = usePagination(auctions, { itemsPerPage: ITEMS_PER_PAGE });
 
   return (
     <div className="container mx-auto px-6 py-8">
