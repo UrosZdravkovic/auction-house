@@ -36,26 +36,45 @@ export const BidHistory = ({ auctionId }: BidHistoryProps) => {
         return new Date(createdAt).toLocaleString();
     };
 
+    const highestBid = allBids.length > 0 ? allBids[0] : null;
+
     return (
         <div className="space-y-4">
             <h3 className="text-lg font-semibold text-text-primary">Bid History</h3>
 
             <div className="space-y-2 max-h-96 overflow-y-auto">
-                {displayedBids.map((bid: Bid) => (
-                    <div
-                        key={bid.id}
-                        className="flex items-center justify-between p-3 bg-surface-hover rounded-lg border border-border"
-                    >
-                        <div className="flex-1">
-                            <p className="text-sm font-medium text-text-primary">
-                                ${bid.amount.toLocaleString()}
-                            </p>
-                            <p className="text-xs text-text-secondary">
-                                {formatDate(bid.createdAt)}
-                            </p>
+                {displayedBids.map((bid: Bid) => {
+                    const isCurrentBid = highestBid && bid.id === highestBid.id;
+
+                    return (
+                        <div
+                            key={bid.id}
+                            className={`flex items-center justify-between p-3 rounded-lg border transition-all ${
+                                isCurrentBid
+                                    ? 'bg-success/10 border-success/30 ring-2 ring-success/20'
+                                    : 'bg-surface-hover border-border'
+                            }`}
+                        >
+                            <div className="flex-1">
+                                <div className="flex items-center gap-2">
+                                    <p className={`text-sm font-medium ${
+                                        isCurrentBid ? 'text-success font-bold' : 'text-text-primary'
+                                    }`}>
+                                        ${bid.amount.toLocaleString()}
+                                    </p>
+                                    {isCurrentBid && (
+                                        <span className="px-2 py-0.5 text-xs font-semibold text-success bg-success/20 rounded-md">
+                                            Current Bid
+                                        </span>
+                                    )}
+                                </div>
+                                <p className="text-xs text-text-secondary mt-0.5">
+                                    {formatDate(bid.createdAt)}
+                                </p>
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    );
+                })}
             </div>
 
             {hasMore && !showAll && (

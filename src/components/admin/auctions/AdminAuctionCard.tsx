@@ -46,7 +46,7 @@ export const AdminAuctionCard = ({ auction }: AdminAuctionCardProps) => {
     <>
       <div
         onClick={handleCardClick}
-        className="group bg-surface border border-border rounded-xl overflow-hidden shover:shadow-lg transition-all duration-300 hover:border-primary/30 cursor-pointer"
+        className="group bg-surface border border-border rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 hover:border-primary/30 cursor-pointer"
 >
         <div className="flex gap-4 p-4">
           {/* Image */}
@@ -90,7 +90,9 @@ export const AdminAuctionCard = ({ auction }: AdminAuctionCardProps) => {
             {/* Stats */}
             <div className="flex items-center gap-4 mb-3 text-xs">
               <div>
-                <span className="text-text-secondary">Current:</span>
+                <span className="text-text-secondary">
+                  {auction.bidsCount === 0 ? "Starting:" : "Current:"}
+                </span>
                 <span className="ml-1.5 font-bold text-primary text-base">
                   ${auction.currentBid.toLocaleString()}
                 </span>
@@ -124,7 +126,7 @@ export const AdminAuctionCard = ({ auction }: AdminAuctionCardProps) => {
 
             {/* Actions */}
             <div className="flex gap-2 mt-auto">
-              {auction.status === "pending" && (
+              {(auction.status === "pending" || auction.status === "rejected") && (
                 <>
                   <button
                     onClick={handleApprove}
@@ -133,23 +135,25 @@ export const AdminAuctionCard = ({ auction }: AdminAuctionCardProps) => {
                   >
                     {approveMutation.isPending ? "Approving..." : "Approve"}
                   </button>
-                  <button
-                    onClick={handleReject}
-                    disabled={isProcessing}
-                    className="px-4 py-2 bg-surface-hover hover:bg-border/30 border border-border text-text-primary text-sm font-medium rounded-lg transition-all duration-250 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    Decline
-                  </button>
+                  {auction.status === "pending" && (
+                    <button
+                      onClick={handleReject}
+                      disabled={isProcessing}
+                      className="px-4 py-2 bg-surface-hover hover:bg-border/30 border border-border text-text-primary text-sm font-medium rounded-lg transition-all duration-250 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      Decline
+                    </button>
+                  )}
                 </>
               )}
 
-              {auction.status === "rejected" && (
+              {auction.status === "approved" && (
                 <button
-                  onClick={handleApprove}
+                  onClick={handleReject}
                   disabled={isProcessing}
-                  className="flex-1 px-4 py-2 bg-success hover:bg-success/90 text-white text-sm font-medium rounded-lg transition-all duration-250 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 px-4 py-2 bg-error/10 hover:bg-error/20 border border-error/30 text-error text-sm font-medium rounded-lg transition-all duration-250 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {approveMutation.isPending ? "Approving..." : "Approve"}
+                  Revert to Declined
                 </button>
               )}
             </div>
