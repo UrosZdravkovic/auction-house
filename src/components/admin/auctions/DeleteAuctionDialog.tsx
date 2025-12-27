@@ -8,7 +8,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { useDeleteAuction } from "../../hooks/useAuctions";
+import { useDeleteAuction } from "../../../hooks/useAuctions";
 
 interface DeleteAuctionDialogProps {
   auctionId: string;

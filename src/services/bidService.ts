@@ -40,3 +40,11 @@ export const countBidsByAuction = async (auctionId: string): Promise<number> => 
   const snapshot = await getDocs(q);
   return snapshot.size;
 };
+
+/**
+ * Count all bids in the system (Admin only)
+ */
+export const countAllBids = async (): Promise<number> => {
+  const snapshot = await getDocs(collection(db, 'bids'));
+  return snapshot.size;
+};

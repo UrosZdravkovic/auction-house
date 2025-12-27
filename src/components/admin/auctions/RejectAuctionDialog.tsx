@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useRejectAuction } from "../../hooks/useAdminActions";
+import { useRejectAuction } from "../../../hooks/useAdminActions";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -9,7 +9,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "../ui/alert-dialog";
+} from "@/components/ui/alert-dialog";
 
 interface RejectAuctionDialogProps {
   auctionId: string;

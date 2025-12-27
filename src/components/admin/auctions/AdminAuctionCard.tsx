@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiTrash2, FiClock } from "react-icons/fi";
-import { useApproveAuction } from "../../hooks/useAdminActions";
+import { useApproveAuction } from "../../../hooks/useAdminActions";
 import { RejectAuctionDialog } from "./RejectAuctionDialog";
 import { DeleteAuctionDialog } from "./DeleteAuctionDialog";
-import { getThumbnailUrl } from "../../services/storageService";
-import { getTimeRemaining } from "../../utils/timeUtils";
-import type { Auction } from "../../types";
+import { getThumbnailUrl } from "../../../services/storageService"
+import { getTimeRemaining } from "../../../utils/timeUtils";
+import type { Auction } from "../../../types";
 
 type AdminAuctionCardProps = {
   auction: Auction;

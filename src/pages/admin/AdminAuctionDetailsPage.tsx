@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { useAuction } from "@/hooks/useAuctions";
 import ImageSlider from "@/components/ui/ImageSlider";
 import { BidHistory } from '../../components/auction/BidsHistory';
-import SameCategoryAuctions from "@/components/admin/SameCategoryAuctions";
+import SameCategoryAuctions from "@/components/admin/auctions/SameCategoryAuctions";
 
 export const AdminAuctionDetailsPage = () => {
     const { id } = useParams<{ id: string }>();

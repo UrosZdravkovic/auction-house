@@ -1,7 +1,7 @@
 // pages/admin/AdminAuctionsPage.tsx
-import { AdminAuctionCard } from "../../components/admin/AdminAuctionCard";
+import { AdminAuctionCard } from "../../components/admin/auctions/AdminAuctionCard";
 import { useAllAuctions } from "../../hooks/useAdminActions";
-import { AdminAuctionCardSkeleton } from "../../components/admin/AdminAuctionCardSkeleton";
+import { AdminAuctionCardSkeleton } from "../../components/admin/auctions/AdminAuctionCardSkeleton";
 import { PaginationControl } from "@/components/ui/PaginationControl";
 import { usePagination } from "../../hooks/usePagination";
 import { ITEMS_PER_PAGE } from "../../constants/auctionConstants";
