@@ -8,6 +8,9 @@
 
 /* Tailwind v4 theme configuration */
 @theme {
+  /* Custom breakpoints */
+  --breakpoint-xs: 550px;
+
   /* Earthy Natural Color Scheme - Light Mode */
   --color-background: #f8fafc;
   --color-surface: #ffffff;

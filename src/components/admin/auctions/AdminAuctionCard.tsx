@@ -47,10 +47,10 @@ export const AdminAuctionCard = ({ auction }: AdminAuctionCardProps) => {
       <div
         onClick={handleCardClick}
         className="group bg-surface border border-border rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 hover:border-primary/30 cursor-pointer"
->
-        <div className="flex gap-4 p-4">
+      >
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 p-3 sm:p-4">
           {/* Image */}
-          <div className="relative w-48 h-48 shrink-0 bg-surface-hover rounded-lg overflow-hidden">
+          <div className="relative w-full h-32 xs:h-36 sm:w-32 sm:h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 shrink-0 bg-surface-hover rounded-lg overflow-hidden">
             <img
               src={getThumbnailUrl(auction.imageUrls?.[0] || "", 480, 480)}
               alt={auction.title}
@@ -62,17 +62,17 @@ export const AdminAuctionCard = ({ auction }: AdminAuctionCardProps) => {
           {/* Content */}
           <div className="flex-1 flex flex-col min-w-0">
             {/* Header */}
-            <div className="flex items-start justify-between gap-3 mb-3">
+            <div className="flex items-start justify-between gap-2 sm:gap-3 mb-2 sm:mb-3">
               <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-1">
-                  <h3 className="text-base font-semibold text-text-primary line-clamp-1 group-hover:text-primary transition-colors">
+                <div className="flex items-center flex-wrap gap-2 mb-1">
+                  <h3 className="text-sm sm:text-base font-semibold text-text-primary line-clamp-1 group-hover:text-primary transition-colors">
                     {auction.title}
                   </h3>
                   <span className={`px-2 py-0.5 text-xs font-medium rounded-md ${statusConfig.bgClass} ${statusConfig.textClass} shrink-0`}>
                     {statusConfig.label}
                   </span>
                 </div>
-                <p className="text-xs text-text-secondary line-clamp-1">
+                <p className="text-xs text-text-secondary line-clamp-1 sm:line-clamp-2">
                   {auction.description}
                 </p>
               </div>
@@ -88,26 +88,26 @@ export const AdminAuctionCard = ({ auction }: AdminAuctionCardProps) => {
             </div>
 
             {/* Stats */}
-            <div className="flex items-center gap-4 mb-3 text-xs">
+            <div className="flex flex-wrap items-center gap-x-2 xs:gap-x-3 gap-y-1 sm:gap-x-4 mb-2 sm:mb-3 text-xs">
               <div>
-                <span className="text-text-secondary">
+                <span className="text-text-secondary text-[10px] xs:text-xs">
                   {auction.bidsCount === 0 ? "Starting:" : "Current:"}
                 </span>
-                <span className="ml-1.5 font-bold text-primary text-base">
+                <span className="ml-1 sm:ml-1.5 font-bold text-primary text-xs xs:text-sm sm:text-base">
                   ${auction.currentBid.toLocaleString()}
                 </span>
               </div>
-              <div className="w-px h-4 bg-border" />
+              <div className="hidden xs:block w-px h-3 xs:h-4 bg-border" />
               <div>
-                <span className="text-text-secondary">Bids:</span>
-                <span className="ml-1.5 font-semibold text-text-primary">{auction.bidsCount}</span>
+                <span className="text-text-secondary text-[10px] xs:text-xs">Bids:</span>
+                <span className="ml-1 sm:ml-1.5 font-semibold text-text-primary text-[10px] xs:text-xs">{auction.bidsCount}</span>
               </div>
-              <div className="w-px h-4 bg-border" />
-              <span className="text-text-secondary capitalize">{auction.category}</span>
+              <div className="hidden sm:block w-px h-4 bg-border" />
+              <span className="hidden sm:inline text-text-secondary capitalize">{auction.category}</span>
               {auction.status === "approved" && !isExpired && (
                 <>
-                  <div className="w-px h-4 bg-border" />
-                  <div className="flex items-center gap-1.5 text-success">
+                  <div className="hidden md:block w-px h-4 bg-border" />
+                  <div className="hidden md:flex items-center gap-1.5 text-success">
                     <FiClock className="w-3.5 h-3.5" />
                     <span className="font-medium">{getTimeRemaining(new Date(auction.endsAt))}</span>
                   </div>
@@ -117,7 +117,7 @@ export const AdminAuctionCard = ({ auction }: AdminAuctionCardProps) => {
 
             {/* Error */}
             {approveMutation.isError && (
-              <div className="mb-3 py-1.5 px-2.5 bg-error/10 border border-error/25 rounded-lg">
+              <div className="mb-2 sm:mb-3 py-1.5 px-2.5 bg-error/10 border border-error/25 rounded-lg">
                 <p className="text-xs text-error">
                   {approveMutation.error?.message || "Failed to approve auction"}
                 </p>
@@ -125,13 +125,13 @@ export const AdminAuctionCard = ({ auction }: AdminAuctionCardProps) => {
             )}
 
             {/* Actions */}
-            <div className="flex gap-2 mt-auto">
+            <div className="flex flex-col xs:flex-row gap-2 mt-auto">
               {(auction.status === "pending" || auction.status === "rejected") && (
                 <>
                   <button
                     onClick={handleApprove}
                     disabled={isProcessing}
-                    className="flex-1 px-4 py-2 bg-success hover:bg-success/90 text-white text-sm font-medium rounded-lg transition-all duration-250 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex-1 px-3 sm:px-4 py-2 bg-success hover:bg-success/90 text-white text-sm font-medium rounded-lg transition-all duration-250 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {approveMutation.isPending ? "Approving..." : "Approve"}
                   </button>
@@ -139,7 +139,7 @@ export const AdminAuctionCard = ({ auction }: AdminAuctionCardProps) => {
                     <button
                       onClick={handleReject}
                       disabled={isProcessing}
-                      className="px-4 py-2 bg-surface-hover hover:bg-border/30 border border-border text-text-primary text-sm font-medium rounded-lg transition-all duration-250 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="px-3 sm:px-4 py-2 bg-surface-hover hover:bg-border/30 border border-border text-text-primary text-sm font-medium rounded-lg transition-all duration-250 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       Decline
                     </button>
@@ -151,7 +151,7 @@ export const AdminAuctionCard = ({ auction }: AdminAuctionCardProps) => {
                 <button
                   onClick={handleReject}
                   disabled={isProcessing}
-                  className="flex-1 px-4 py-2 bg-error/10 hover:bg-error/20 border border-error/30 text-error text-sm font-medium rounded-lg transition-all duration-250 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 px-3 sm:px-4 py-2 bg-error/10 hover:bg-error/20 border border-error/30 text-error text-sm font-medium rounded-lg transition-all duration-250 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Revert to Declined
                 </button>
