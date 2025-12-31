@@ -22,8 +22,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ImagePicker } from "./ImagePicker";
-import { useCreateAuction } from "../../hooks/useAuctions";
-import { useAuth } from "../../hooks/useAuth";
+import { useCreateAuction } from "../../../hooks/useAuctions";
+import { useAuth } from "../../../hooks/useAuth";
 
 interface AddAuctionDialogProps {
   open: boolean;

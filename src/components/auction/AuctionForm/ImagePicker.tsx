@@ -2,8 +2,8 @@ import { useState, useRef } from "react";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { HiUpload, HiX } from "react-icons/hi";
-import { uploadImage } from "../../services/storageService";
-import { useAuth } from "../../hooks/useAuth";
+import { uploadImage } from "../../../services/storageService";
+import { useAuth } from "../../../hooks/useAuth";
 
 interface ImagePickerProps {
   value: string[];

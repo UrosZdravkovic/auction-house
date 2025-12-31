@@ -1,6 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
-import { UserLayout } from '../components/navigation/UserLayout';
-import { AdminLayout } from '../components/navigation/AdminLayout';
+import { UserLayout } from '../components/user/navigation/UserLayout';
+import { AdminLayout } from '../components/admin/navigation/AdminLayout';
 import AuctionsPage from '../pages/user/AuctionsPage';
 import MyAuctionsPage from '../pages/user/MyAuctionsPage';
 import { ProfilePage } from '../pages/user/ProfilePage';

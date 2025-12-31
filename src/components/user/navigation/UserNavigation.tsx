@@ -1,9 +1,9 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { HiViewGrid, HiUserCircle, HiLogout, HiPlus, HiCollection, HiCash } from 'react-icons/hi';
-import { ThemeToggle } from '../../components/navigation/ThemeToggle';
-import { useAuth } from '../../hooks/useAuth';
-import { AddAuctionDialog } from '../auction/AddAuctionDialog';
+import { ThemeToggle } from '../../navigation/ThemeToggle';
+import { useAuth } from '../../../hooks/useAuth';
+import { AddAuctionDialog } from '../../auction/AuctionForm/AddAuctionDialog';
 
 export const UserNavigation = () => {
   const { user, logout } = useAuth();
