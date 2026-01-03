@@ -8,7 +8,7 @@ import UserNavigationSection from './UserNavigationSection';
 
 export const AdminNavigation = () => {
   const [showAddDialog, setShowAddDialog] = useState(false);
-  const { isCollapsed, toggleSidebar } = useSidebar();
+  const { isCollapsed, toggleSidebar, canToggle } = useSidebar();
 
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>
     `flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${isActive
@@ -19,10 +19,11 @@ export const AdminNavigation = () => {
   return (
     <>
       <aside
-        className={`fixed left-0 top-0 h-screen bg-surface border-r border-border flex flex-col z-50 transition-all duration-300 ease-in-out ${
+        className={`fixed left-0 top-0 h-screen overflow-hidden bg-surface border-r border-border flex flex-col z-50 transition-[width] duration-300 ease-in-out ${
           isCollapsed ? 'w-20' : 'w-64'
         }`}
       >
+        
         {/* Logo Section */}
         <LogoSection isCollapsed={isCollapsed} />
 
@@ -36,26 +37,29 @@ export const AdminNavigation = () => {
         {/* User Navigation Section */}
         <UserNavigationSection navLinkClass={navLinkClass} isCollapsed={isCollapsed} />
 
-        {/* Collapse Toggle Button */}
-        <div className={`p-4 border-t border-border transition-all duration-300 ${isCollapsed ? 'px-2' : 'px-4'}`}>
-          <button
-            onClick={toggleSidebar}
-            className={`w-full flex items-center gap-3 py-3 rounded-xl text-text-secondary hover:text-text-primary hover:bg-surface-hover transition-all duration-200 ${
-              isCollapsed ? 'justify-center px-2' : 'px-4'
-            }`}
-            title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-          >
-            {isCollapsed ? (
-              <HiChevronRight className="w-5 h-5 shrink-0" />
-            ) : (
-              <>
-                <HiChevronLeft className="w-5 h-5 shrink-0" />
-                <span className="text-sm">Collapse</span>
-              </>
-            )}
-          </button>
-        </div>
+        {/* Collapse Toggle Button - Only shown on desktop (≥1200px) */}
+        {canToggle && (
+          <div className={`p-4 border-t border-border transition-all duration-300 ${isCollapsed ? 'px-2' : 'px-4'}`}>
+            <button
+              onClick={toggleSidebar}
+              className={`w-full flex items-center gap-3 py-3 rounded-xl text-text-secondary hover:text-text-primary hover:bg-surface-hover transition-all duration-200 ${
+                isCollapsed ? 'justify-center px-2' : 'px-4'
+              }`}
+              title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+            >
+              {isCollapsed ? (
+                <HiChevronRight className="w-5 h-5 shrink-0" />
+              ) : (
+                <>
+                  <HiChevronLeft className="w-5 h-5 shrink-0" />
+                  <span className="text-sm">Collapse</span>
+                </>
+              )}
+            </button>
+          </div>
+        )}
       </aside>
+      
 
       <AddAuctionDialog open={showAddDialog} onOpenChange={setShowAddDialog} />
     </>
