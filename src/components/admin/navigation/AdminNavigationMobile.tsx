@@ -1,9 +1,30 @@
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { HiMenu, HiX, HiChartBar, HiViewGrid, HiUserCircle, HiCog, HiLogout, HiPlus } from 'react-icons/hi';
+import { HiChartBar, HiViewGrid, HiUserCircle, HiCog, HiLogout, HiPlus } from 'react-icons/hi';
 import { ThemeToggle } from '../../navigation/ThemeToggle';
 import { useAuth } from '../../../hooks/useAuth';
 import { AddAuctionDialog } from '../../auction/AuctionForm/AddAuctionDialog';
+
+// Animated hamburger icon component
+const HamburgerIcon = ({ isOpen }: { isOpen: boolean }) => (
+    <div className="w-8 h-8 flex flex-col justify-center items-center gap-2">
+        <span
+            className={`hamburger-line block h-[3px] w-7 bg-current rounded-full origin-center ${
+                isOpen ? 'rotate-45 translate-y-[11px]' : ''
+            }`}
+        />
+        <span
+            className={`hamburger-line block h-[3px] w-7 bg-current rounded-full ${
+                isOpen ? 'opacity-0 scale-0' : 'opacity-100 scale-100'
+            }`}
+        />
+        <span
+            className={`hamburger-line block h-[3px] w-7 bg-current rounded-full origin-center ${
+                isOpen ? '-rotate-45 -translate-y-[11px]' : ''
+            }`}
+        />
+    </div>
+);
 
 export const AdminNavigationMobile = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -41,11 +62,7 @@ export const AdminNavigationMobile = () => {
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
                     className="p-2 rounded-xl text-text-secondary hover:text-text-primary hover:bg-surface-hover transition-all duration-200"
                 >
-                    {isMenuOpen ? (
-                        <HiX className="w-6 h-6" />
-                    ) : (
-                        <HiMenu className="w-6 h-6" />
-                    )}
+                    <HamburgerIcon isOpen={isMenuOpen} />
                 </button>
 
                 <div className="flex items-center gap-2">
@@ -57,17 +74,17 @@ export const AdminNavigationMobile = () => {
             </header>
 
             {/* Mobile Menu Overlay */}
-            {isMenuOpen && (
-                <div
-                    className="fixed inset-0 bg-black/50 z-40"
-                    onClick={() => setIsMenuOpen(false)}
-                />
-            )}
+            <div
+                className={`fixed inset-0 bg-black/50 z-40 transition-opacity duration-500 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] ${
+                    isMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+                }`}
+                onClick={() => setIsMenuOpen(false)}
+            />
 
             {/* Mobile Menu Drawer */}
             <aside
-                className={`fixed top-16 left-0 bottom-0 w-72 bg-surface border-r border-border flex flex-col z-50 transition-transform duration-300 ease-in-out ${
-                    isMenuOpen ? 'translate-x-0' : '-translate-x-full'
+                className={`fixed top-16 left-0 bottom-0 w-72 bg-surface border-r border-border flex flex-col z-50 transition-all duration-500 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] ${
+                    isMenuOpen ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0'
                 }`}
             >
                 {/* Create Auction Button */}

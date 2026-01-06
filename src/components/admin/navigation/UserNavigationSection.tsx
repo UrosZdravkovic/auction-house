@@ -37,7 +37,9 @@ export default function UserNavigationSection({ navLinkClass, isCollapsed }: Use
                         title={isCollapsed ? label : undefined}
                     >
                         <Icon className="w-5 h-5 shrink-0" />
-                        {!isCollapsed && <span className="text-sm">{label}</span>}
+                        <span className={`text-sm whitespace-nowrap overflow-hidden ${isCollapsed ? 'w-0 opacity-0' : 'w-auto opacity-100'}`}>
+                            {label}
+                        </span>
                     </NavLink>
                 ))}
 
@@ -50,7 +52,9 @@ export default function UserNavigationSection({ navLinkClass, isCollapsed }: Use
                     title={isCollapsed ? 'Logout' : undefined}
                 >
                     <HiLogout className="w-5 h-5 shrink-0" />
-                    {!isCollapsed && <span className="text-sm">Logout</span>}
+                    <span className={`text-sm whitespace-nowrap overflow-hidden ${isCollapsed ? 'w-0 opacity-0' : 'w-auto opacity-100'}`}>
+                        Logout
+                    </span>
                 </button>
             </div>
 
@@ -63,16 +67,14 @@ export default function UserNavigationSection({ navLinkClass, isCollapsed }: Use
                         }`}>
                             <HiUserCircle className={`text-text-secondary ${isCollapsed ? 'w-5 h-5' : 'w-6 h-6'}`} />
                         </div>
-                        {!isCollapsed && (
-                            <div className="flex-1 min-w-0">
-                                <p className="text-sm font-medium text-text-primary truncate">
-                                    {user.displayName || 'Admin User'}
-                                </p>
-                                <p className="text-xs text-text-secondary truncate">
-                                    {user.email}
-                                </p>
-                            </div>
-                        )}
+                        <div className={`flex-1 min-w-0 overflow-hidden ${isCollapsed ? 'w-0 opacity-0' : 'w-auto opacity-100'}`}>
+                            <p className="text-sm font-medium text-text-primary truncate">
+                                {user.displayName || 'Admin User'}
+                            </p>
+                            <p className="text-xs text-text-secondary truncate">
+                                {user.email}
+                            </p>
+                        </div>
                     </div>
                 </div>
             )}

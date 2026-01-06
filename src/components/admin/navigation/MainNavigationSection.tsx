@@ -19,13 +19,15 @@ export default function MainNavigationSection({ setShowAddDialog, navLinkClass, 
             <div className={`py-4 transition-all duration-300 ${isCollapsed ? 'px-2' : 'px-4'}`}>
                 <button
                     onClick={() => setShowAddDialog(true)}
-                    className={`w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-medium text-white bg-primary hover:bg-primary/90 transition-all duration-200 ${
-                        isCollapsed ? 'px-2' : 'px-4'
+                    className={`w-full flex items-center justify-center py-3 rounded-xl text-sm font-medium text-white bg-primary hover:bg-primary/90 transition-all duration-200 ${
+                        isCollapsed ? 'px-2' : 'px-4 gap-2'
                     }`}
                     title={isCollapsed ? 'Create Auction' : undefined}
                 >
                     <HiPlus className="w-5 h-5 shrink-0" />
-                    {!isCollapsed && <span>Create Auction</span>}
+                    <span className={`whitespace-nowrap overflow-hidden ${isCollapsed ? 'w-0 opacity-0' : 'w-auto opacity-100'}`}>
+                        Create Auction
+                    </span>
                 </button>
             </div>
 
@@ -41,7 +43,9 @@ export default function MainNavigationSection({ setShowAddDialog, navLinkClass, 
                             title={isCollapsed ? label : undefined}
                         >
                             <Icon className="w-5 h-5 shrink-0" />
-                            {!isCollapsed && <span className="text-sm">{label}</span>}
+                            <span className={`text-sm whitespace-nowrap overflow-hidden ${isCollapsed ? 'w-0 opacity-0' : 'w-auto opacity-100'}`}>
+                                {label}
+                            </span>
                         </NavLink>
                     ))}
                 </div>

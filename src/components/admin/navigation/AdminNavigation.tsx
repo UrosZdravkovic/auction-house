@@ -19,7 +19,7 @@ export const AdminNavigation = () => {
   return (
     <>
       <aside
-        className={`fixed left-0 top-0 h-screen overflow-hidden bg-surface border-r border-border flex flex-col z-50 transition-[width] duration-300 ease-in-out ${
+        className={`fixed left-0 top-0 h-screen overflow-hidden bg-surface border-r border-border flex flex-col z-50 ${
           isCollapsed ? 'w-20' : 'w-64'
         }`}
       >
@@ -50,11 +50,11 @@ export const AdminNavigation = () => {
               {isCollapsed ? (
                 <HiChevronRight className="w-5 h-5 shrink-0" />
               ) : (
-                <>
-                  <HiChevronLeft className="w-5 h-5 shrink-0" />
-                  <span className="text-sm">Collapse</span>
-                </>
+                <HiChevronLeft className="w-5 h-5 shrink-0" />
               )}
+              <span className={`text-sm whitespace-nowrap overflow-hidden ${isCollapsed ? 'w-0 opacity-0' : 'w-auto opacity-100'}`}>
+                Collapse
+              </span>
             </button>
           </div>
         )}
