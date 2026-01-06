@@ -58,16 +58,14 @@ export default function UserNavigationSection({ navLinkClass, isCollapsed }: Use
                 </button>
             </div>
 
-            {/* User Info */}
-            {user && (
-                <div className={`border-t border-border transition-all duration-300 ${isCollapsed ? 'p-2' : 'p-4'}`}>
-                    <div className={`flex items-center gap-3 ${isCollapsed ? 'justify-center' : 'px-2'}`}>
-                        <div className={`bg-surface-hover rounded-full flex items-center justify-center shrink-0 ${
-                            isCollapsed ? 'w-8 h-8' : 'w-10 h-10'
-                        }`}>
-                            <HiUserCircle className={`text-text-secondary ${isCollapsed ? 'w-5 h-5' : 'w-6 h-6'}`} />
+            {/* User Info - hidden when collapsed */}
+            {user && !isCollapsed && (
+                <div className="border-t border-border p-4">
+                    <div className="flex items-center gap-3 px-2">
+                        <div className="w-10 h-10 bg-surface-hover rounded-full flex items-center justify-center shrink-0">
+                            <HiUserCircle className="w-6 h-6 text-text-secondary" />
                         </div>
-                        <div className={`flex-1 min-w-0 overflow-hidden ${isCollapsed ? 'w-0 opacity-0' : 'w-auto opacity-100'}`}>
+                        <div className="flex-1 min-w-0">
                             <p className="text-sm font-medium text-text-primary truncate">
                                 {user.displayName || 'Admin User'}
                             </p>
