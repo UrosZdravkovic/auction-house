@@ -45,9 +45,17 @@ export const AdminAuctionsPage = () => {
 
       {!isLoading && !isError && (
         <>
-          <div className="mb-4 text-sm text-text-secondary">
-            Showing {(currentPage - 1) * ITEMS_PER_PAGE + 1}-
-            {Math.min(currentPage * ITEMS_PER_PAGE, totalItems)} of {totalItems} auctions
+          <div className="mb-4 flex items-center justify-between">
+            <p className="text-sm text-text-secondary">
+              Showing {(currentPage - 1) * ITEMS_PER_PAGE + 1}-
+              {Math.min(currentPage * ITEMS_PER_PAGE, totalItems)} of {totalItems} auctions
+            </p>
+            <PaginationControl
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={goToPage}
+              isDisabled={isTransitioning}
+            />
           </div>
 
           <div
@@ -58,15 +66,6 @@ export const AdminAuctionsPage = () => {
             {paginatedAuctions?.map((auction) => (
               <AdminAuctionCard key={auction.id} auction={auction} />
             ))}
-          </div>
-
-          <div className="mt-4">
-            <PaginationControl
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={goToPage}
-              isDisabled={isTransitioning}
-            />
           </div>
         </>
       )}
