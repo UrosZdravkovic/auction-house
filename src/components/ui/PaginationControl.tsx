@@ -53,7 +53,7 @@ export function PaginationControl({
   if (totalPages <= 1) return null;
 
   return (
-    <Pagination>
+    <Pagination className="mx-0 w-auto justify-start">
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
