@@ -93,9 +93,12 @@ export default function SameCategoryAuctions({ categoryId, currentAuctionId }: S
           loop={true}
           breakpoints={{
             0: {
+              slidesPerView: 1,
+            },
+            350: {
               slidesPerView: 2,
             },
-            550: {
+            750: {
               slidesPerView: 3,
             },
           }}
