@@ -88,9 +88,17 @@ export default function SameCategoryAuctions({ categoryId, currentAuctionId }: S
         <Swiper
           onSwiper={setSwiper}
           modules={[Navigation]}
-          slidesPerView={3}
+          slidesPerView={2}
           spaceBetween={12}
           loop={true}
+          breakpoints={{
+            0: {
+              slidesPerView: 2,
+            },
+            550: {
+              slidesPerView: 3,
+            },
+          }}
         >
           {similarAuctions.map(auction => (
             <SwiperSlide key={auction.id}>
@@ -99,7 +107,7 @@ export default function SameCategoryAuctions({ categoryId, currentAuctionId }: S
           ))}
         </Swiper>
       ) : (
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-2 xs:grid-cols-3 gap-3">
           {similarAuctions.map(auction => (
             <AuctionCard key={auction.id} auction={auction} />
           ))}

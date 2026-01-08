@@ -7,11 +7,18 @@ import 'swiper/swiper-bundle.css';
 
 type ImageSliderProps = {
   images: string[];
+  alwaysShowArrows?: boolean;
 };
 
-export default function ImageSlider({ images }: ImageSliderProps) {
+export default function ImageSlider({ images, alwaysShowArrows = false }: ImageSliderProps) {
   const [mainSwiper, setMainSwiper] = useState<SwiperType | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+
+  // Show arrows: always if prop is true, or on hover for larger screens
+  // When alwaysShowArrows is "responsive", show always below xl-custom (1050px)
+  const arrowVisibilityClass = alwaysShowArrows
+    ? "opacity-100"
+    : "max-xl-custom:opacity-100 opacity-0 group-hover:opacity-100";
 
   return (
     <div className="relative bg-surface rounded-xl overflow-hidden shadow-lg group">
@@ -48,7 +55,7 @@ export default function ImageSlider({ images }: ImageSliderProps) {
       {/* Custom Navigation Arrows */}
       <button
         onClick={() => mainSwiper?.slidePrev()}
-        className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-black/50 hover:bg-black/70 text-white p-2 rounded-lg transition-all duration-300 opacity-0 group-hover:opacity-100"
+        className={`absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-black/50 hover:bg-black/70 text-white p-2 rounded-lg transition-all duration-300 ${arrowVisibilityClass}`}
         aria-label="Previous slide"
       >
         <ChevronLeft className="w-6 h-6" />
@@ -56,7 +63,7 @@ export default function ImageSlider({ images }: ImageSliderProps) {
 
       <button
         onClick={() => mainSwiper?.slideNext()}
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-black/50 hover:bg-black/70 text-white p-2 rounded-lg transition-all duration-300 opacity-0 group-hover:opacity-100"
+        className={`absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-black/50 hover:bg-black/70 text-white p-2 rounded-lg transition-all duration-300 ${arrowVisibilityClass}`}
         aria-label="Next slide"
       >
         <ChevronRight className="w-6 h-6" />

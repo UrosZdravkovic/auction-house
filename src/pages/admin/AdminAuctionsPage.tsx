@@ -45,7 +45,7 @@ export const AdminAuctionsPage = () => {
 
       {!isLoading && !isError && (
         <>
-          <div className="mb-4 flex items-center gap-3">
+          <div className="mb-4 flex flex-col xs:flex-row xs:items-center gap-2 xs:gap-3">
             <p className="text-sm text-text-secondary whitespace-nowrap">
               Showing {(currentPage - 1) * ITEMS_PER_PAGE + 1}-{Math.min(currentPage * ITEMS_PER_PAGE, totalItems)} of {totalItems} auctions
             </p>
