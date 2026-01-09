@@ -3,6 +3,7 @@ import { UserLayout } from '../components/user/navigation/UserLayout';
 import { AdminLayout } from '../components/admin/navigation/AdminLayout';
 import AuctionsPage from '../pages/user/AuctionsPage';
 import MyAuctionsPage from '../pages/user/MyAuctionsPage';
+import { AuctionDetailsPage } from '../pages/user/AuctionDetailsPage';
 import { ProfilePage } from '../pages/user/ProfilePage';
 import { AuthenticationPage } from '../pages/authentication/AuthenticationPage';
 import { AdminDashboardPage } from '../pages/admin/AdminDashboardPage';
@@ -26,6 +27,10 @@ export const createUserRouter = () =>
         {
           path: 'my-auctions',
           element: <MyAuctionsPage />,
+        },
+        {
+          path: 'auction/:id',
+          element: <AuctionDetailsPage />,
         },
         {
           path: 'profile',

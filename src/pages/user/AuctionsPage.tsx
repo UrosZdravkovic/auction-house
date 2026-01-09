@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 import { useActiveAuctions } from "../../hooks/useAuctions";
 import { useAuth } from "../../hooks/useAuth";
-import { UserAuctionCard } from "../../components/user/UserAuctionCard";
-import { UserAuctionCardSkeleton } from "../../components/user/UserAuctionCardSkeleton";
+import { UserAuctionCard } from "../../components/user/auctions/UserAuctionCard";
+import { UserAuctionCardSkeleton } from "../../components/user/auctions/UserAuctionCardSkeleton";
 import { PaginationControl } from "@/components/ui/PaginationControl";
 import { usePagination } from "../../hooks/usePagination";
 import { ITEMS_PER_PAGE } from "../../constants/auctionConstants";

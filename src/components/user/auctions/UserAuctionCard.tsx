@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiClock } from "react-icons/fi";
-import { useAuth } from "../../hooks/useAuth";
-import { usePlaceBid } from "../../hooks/useBids";
-import { getThumbnailUrl } from "../../services/storageService";
-import { getTimeRemaining } from "../../utils/timeUtils";
-import type { Auction } from "../../types";
+import { useAuth } from "../../../hooks/useAuth";
+import { usePlaceBid } from "../../../hooks/useBids";
+import { getThumbnailUrl } from "../../../services/storageService";
+import { getTimeRemaining } from "../../../utils/timeUtils";
+import type { Auction } from "../../../types";
 
 interface UserAuctionCardProps {
   auction: Auction;
