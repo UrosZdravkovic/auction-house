@@ -116,7 +116,7 @@ export const UserAuctionCard = ({ auction }: UserAuctionCardProps) => {
               )}
             </div>
 
-            {/* Action Button */}
+            {/* Action Buttons */}
             <div className="flex flex-col xs:flex-row gap-2 mt-auto">
               {!user ? (
                 <button
