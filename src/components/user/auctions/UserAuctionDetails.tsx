@@ -46,8 +46,32 @@ export const UserAuctionDetails = ({ auction, auctionId }: UserAuctionDetailsPro
 
   return (
     <div className="flex flex-col xl-custom:flex-row gap-6 p-4 sm:p-6 xl-custom:p-8 max-w-7xl mx-auto">
+      {/* Title - order 1 on mobile, stays in right column on desktop */}
+      <div className="xl-custom:hidden order-1">
+        <div className="bg-surface rounded-xl border border-border p-4 sm:p-6">
+          <div className="flex items-center gap-4 mb-4 pb-4 border-b border-border">
+            <button
+              onClick={() => navigate("/")}
+              className="flex items-center gap-1.5 text-text-secondary hover:text-text-primary transition-colors"
+            >
+              <FiArrowLeft className="w-4 h-4" />
+              <span className="text-sm font-medium">Back to Auctions</span>
+            </button>
+          </div>
+          <h1 className="text-xl font-bold text-text-primary">{auction.title}</h1>
+          <p className="text-text-secondary mt-2">{auction.description}</p>
+
+          {/* Category */}
+          <div className="mt-4">
+            <span className="px-3 py-1 bg-primary/10 text-primary text-sm font-medium rounded-full">
+              {auction.category}
+            </span>
+          </div>
+        </div>
+      </div>
+
       {/* Left column - Image and Bid history */}
-      <div className="flex flex-col gap-6 xl-custom:w-1/2 order-1 xl-custom:order-1">
+      <div className="flex flex-col gap-6 xl-custom:w-1/2 order-2 xl-custom:order-1">
         {/* Image slider */}
         <div className="bg-surface rounded-xl border border-border overflow-hidden">
           <ImageSlider images={auction.imageUrls} />
@@ -60,9 +84,9 @@ export const UserAuctionDetails = ({ auction, auctionId }: UserAuctionDetailsPro
       </div>
 
       {/* Right column - Title, Bid, Stats */}
-      <div className="flex flex-col gap-6 xl-custom:w-1/2 order-2 xl-custom:order-2">
-        {/* Title, description, back button */}
-        <div className="bg-surface rounded-xl border border-border p-4 sm:p-6">
+      <div className="flex flex-col gap-6 xl-custom:w-1/2 order-3 xl-custom:order-2">
+        {/* Title, description, back button - hidden on mobile, shown on desktop */}
+        <div className="hidden xl-custom:block bg-surface rounded-xl border border-border p-4 sm:p-6">
           <div className="flex items-center gap-4 mb-4 pb-4 border-b border-border">
             <button
               onClick={() => navigate("/")}
